@@ -1,12 +1,12 @@
-use tauri::Manager;
 use sqlx::PgPool;
 use std::env;
 
 mod models;
 mod repositories;
 mod services;
-mod handlers;
 mod dtos;
+mod resize;
+mod handlers;
 
 #[tokio::main]
 async fn main() {
@@ -16,15 +16,27 @@ async fn main() {
     // Retrieve DATABASE_URL from environment variables
     let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set in .env");
 
-    // Connect to the database
-    let pool = PgPool::connect(&database_url).await.expect("Failed to connect to the database");
+    // Connect to the database with error handling
+    // In your main.rs, you can add more detailed error handling
+let pool = match PgPool::connect(&database_url).await {
+    Ok(pool) => {
+        println!("Successfully connected to the database");
+        pool
+    },
+    Err(err) => {
+        eprintln!("Failed to connect to the database: {}", err);
+        eprintln!(" Using connection string: {}", database_url);
+        std::process::exit(1);
+    }
+};
 
     // Start Tauri application
     tauri::Builder::default()
         .manage(pool)
         .invoke_handler(tauri::generate_handler![
             handlers::usuario_handler::create_usuario,
-            handlers::usuario_handler::get_usuario_by_id
+            handlers::usuario_handler::get_usuario_by_id,
+            handlers::resize_handler::resize_current_window
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

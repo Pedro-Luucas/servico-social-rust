@@ -1,8 +1,10 @@
-import React, { useEffect } from 'react';
-import { User } from './types';
+import React from 'react';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+
 import CadastroUsuario from './pages/CadastroUsuario';
 import Home from './pages/Home';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import ParecerSocial from './pages/ParecerSocial';
+import AdicionarDados from './pages/AdicionarDados';
 
 const router = createBrowserRouter([
   {
@@ -12,6 +14,14 @@ const router = createBrowserRouter([
   {
     path: '/cadastro-usuario',
     element: <CadastroUsuario onSubmit={() => {}} />
+  },
+  {
+    path: '/adicionar-dados',
+    element: <AdicionarDados />,
+  },
+  {
+    path: '/parecer-social',
+    element: <ParecerSocial />,
   },
 
 ]);

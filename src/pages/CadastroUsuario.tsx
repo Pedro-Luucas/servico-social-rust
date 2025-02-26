@@ -6,6 +6,7 @@ import { LeftOutlined } from '@ant-design/icons';
 import EnderecoModal from '../components/EnderecoModal';
 import ResponsavelModal from '../components/ResponsavelModal';
 import { User } from '../types';
+import { invoke } from '@tauri-apps/api/core';
 
 interface UserFormProps {
   onSubmit: (user: User) => void;
@@ -82,14 +83,21 @@ const CadastroUsuario: React.FC<UserFormProps> = ({ onSubmit, initialData }) => 
     }
   });
 
+  useEffect(() => {
+
+      invoke('resize_current_window', { width: 800, height: 900 })
+        .then(() => console.log('Window resized successfully'))
+        .catch((error) => console.error('Failed to resize window:', error));
+    }, []);
+
   const [showModals, setShowModals] = useState({
     exit: false,
     endereco: false,
     responsavel: false,
   });
 
-  const [dataNasc, setDataNasc] = useState<Dayjs | undefined>(
-    formData.dataNasc ? dayjs(formData.dataNasc) : undefined
+  const [data_nasc, setDataNasc] = useState<Dayjs | undefined>(
+    formData.data_nasc ? dayjs(formData.data_nasc) : undefined
   );
 
   const handleToggleModal = useCallback((modal: keyof typeof showModals, value: boolean) => {
@@ -100,16 +108,6 @@ const CadastroUsuario: React.FC<UserFormProps> = ({ onSubmit, initialData }) => 
     sessionStorage.setItem('formData', JSON.stringify(formData));
   }, [formData]);
 
-  const isFormComplete = Boolean(
-    formData.nome.trim() &&
-    formData.cpf.trim() &&
-    formData.dataNasc &&
-    formData.telefone.trim() &&
-    formData.escolaridade !== undefined &&
-    formData.patologia.trim() &&
-    formData.cep?.trim() &&
-    formData.respNome?.trim()
-  );
 
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -120,7 +118,7 @@ const CadastroUsuario: React.FC<UserFormProps> = ({ onSubmit, initialData }) => 
   const handleDate = useCallback((date: Dayjs | null) => {
     if (!date) return;
     setDataNasc(date);
-    setFormData((prev: User) => ({ ...prev, dataNasc: date.toISOString() }));
+    setFormData((prev: User) => ({ ...prev, data_nasc: date.toISOString() }));
   }, []);
 
   const handleSelectChange = useCallback((name: keyof User, value: unknown) => {
@@ -178,7 +176,7 @@ const CadastroUsuario: React.FC<UserFormProps> = ({ onSubmit, initialData }) => 
       <Input
         name={name as string}
         placeholder={label}
-        value={formData[name]}
+        value={formData[name] as string | number}
         onChange={handleChange}
         className="border rounded p-2 md:p-4 w-full text-lg"
       />
@@ -203,7 +201,7 @@ const CadastroUsuario: React.FC<UserFormProps> = ({ onSubmit, initialData }) => 
           <div className="flex flex-col">
             <label className="text-lg">Data de nascimento*</label>
             <DatePicker
-              value={dataNasc}
+              value={data_nasc}
               onChange={handleDate}
               className="border rounded p-2 md:p-4 w-full text-lg"
               popupClassName="date-picker-dropdown"
@@ -245,7 +243,7 @@ const CadastroUsuario: React.FC<UserFormProps> = ({ onSubmit, initialData }) => 
           <Button
             type="primary"
             onClick={() => {navigate('/parecer-social')}}
-            className="md:col-span-2 bg-blue-500 text-white p-2 md:p-4 w-full text-lg rounded"
+            className="md:col-span-2 bg-blue-500 text-white p-2 md:p-4 "
           >
             Adicionar Parecer Social
           </Button>
@@ -265,8 +263,7 @@ const CadastroUsuario: React.FC<UserFormProps> = ({ onSubmit, initialData }) => 
 
           <Button
             type="primary"
-            className="md:col-span-2 bg-blue-500 text-white p-2 md:p-4 w-full text-lg rounded hover:bg-yellow-700"
-            disabled={!isFormComplete}
+            className="md:col-span-2 p-2 md:p-4 w-full"
           >
             <Link to="/adicionar-dados" className="w-full block">Adicionar Dados</Link>
           </Button>

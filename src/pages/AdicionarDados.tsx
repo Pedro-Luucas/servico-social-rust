@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Input, Select, Checkbox, Button, List, Card, Modal } from 'antd';
+import { Input, Select, Checkbox, Button, Modal } from 'antd';
 import { LeftOutlined, CloseOutlined } from '@ant-design/icons';
 import { useCheckbox } from '../utils/useCheckbox';
 import { User } from '../types';
@@ -8,6 +8,7 @@ import { User } from '../types';
 import { submitUsuario } from "../components/submitUsuario";
 // @ts-ignore
 import { editUsuario } from '../components/editUsuario';
+import { invoke } from '@tauri-apps/api/core';
 
 
 const AdicionarDados: React.FC = () => {
@@ -113,6 +114,14 @@ const AdicionarDados: React.FC = () => {
 
     setIsFormComplete(isComplete);
   }, [dados]);
+
+  // resize a window
+  useEffect(() => {
+
+    invoke('resize_current_window', { width: 800, height: 1010 })
+      .then(() => console.log('Window resized successfully'))
+      .catch((error) => console.error('Failed to resize window:', error));
+  }, []);
 
 
 
@@ -240,15 +249,15 @@ const handleSubmit = async (e: React.FormEvent) => {
   try {
     const isEditing = sessionStorage.getItem("edit") === "true";
     
-    if (isEditing) {
-      setShowModalSubmit(false);
-      const result = await editUsuario();
-      navigate('/pesquisa')
-    } else {
-      setShowModalSubmit(false);
-      const result = await submitUsuario();
-      navigate('/')
-    }
+    //if (isEditing) {
+    //  setShowModalSubmit(false);
+    //  const result = await editUsuario();
+    //  navigate('/pesquisa')
+    //} else {
+    //  setShowModalSubmit(false);
+    //  const result = await submitUsuario();
+    //  navigate('/')
+    //}
     
   } catch (error) {
     console.error("Error submitting/editing user:", error);
@@ -259,10 +268,10 @@ const handleSubmit = async (e: React.FormEvent) => {
 
   return (
     <div className="container mx-auto p-4 md:p-8">
-      <h1 className="text-2xl md:text-4xl font-bold mb-4 md:mb-8 text-center">
+      <h1 className="text-2xl md:text-4xl font-bold mb-4 md:mb-8 text-center ">
         Adicionar Dados para o Usuário
       </h1>
-      <div className="max-w-3xl mx-auto mb-10 bg-white p-6 rounded-lg shadow-md ">
+      <div className="max-w-3xl mx-auto mb-10 bg-white p-6  ">
         <div className="flex flex-row justify-between mx-8">
           <Button type='text' icon={<LeftOutlined />} onClick={handleVoltar} />
           <Button icon={<CloseOutlined />} onClick={() => {setShowModalExit(true)}} className='self-start' />
@@ -351,6 +360,18 @@ const handleSubmit = async (e: React.FormEvent) => {
                 { value: 'cooperativa', label: 'cooperativa' },
                 { value: 'irregular', label: 'irregular' },
               ]}
+            />
+          </div>
+          
+          <div className="flex flex-col">
+            <label className="text-lg">Valor da Energia</label>
+            <Input
+              name="energia_valor"
+              placeholder="Valor da Energia"
+              type="number"
+              value={dados.energia_valor}
+              onChange={handleInputChange}
+              className="border rounded p-2 w-full text-lg"
             />
           </div>
 

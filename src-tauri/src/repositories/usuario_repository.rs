@@ -16,10 +16,12 @@ impl UsuarioRepository {
                 resp_cpf as "resp_cpf?", resp_idade as "resp_idade?", resp_telefone as "resp_telefone?", 
                 resp_profissao as "resp_profissao?", resp_escolaridade as "resp_escolaridade?", 
                 resp_parentesco as "resp_parentesco?", resp_renda as "resp_renda?", fonte_renda, 
-                valor_renda, moradia, agua, agua_valor, energia, energia_valor, bens as "bens?", 
+                valor_renda as "valor_renda?", moradia, agua, agua_valor as "agua_valor?", energia, 
+                energia_valor as "energia_valor?", bens as "bens?", 
                 internet, cras, acesso_cras as "acesso_cras?", desc_doenca as "desc_doenca?", 
-                medicamentos as "medicamentos?", medicamentos_gasto, tratamento as "tratamento?", 
-                nutri, tempo_tratamento as "tempo_tratamento?", local as "local?", encaminhamento as "encaminhamento?", 
+                medicamentos as "medicamentos?", medicamentos_gasto as "medicamentos_gasto?", 
+                tratamento as "tratamento?", nutri, tempo_tratamento as "tempo_tratamento?", 
+                local as "local?", encaminhamento as "encaminhamento?", 
                 solicitacoes, motivo_desligamento as "motivo_desligamento?", parecer_social, operador_id as "operador_id?"
             FROM usuarios
             WHERE id = $1
