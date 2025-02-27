@@ -5,6 +5,7 @@ import CadastroUsuario from './pages/CadastroUsuario';
 import Home from './pages/Home';
 import ParecerSocial from './pages/ParecerSocial';
 import AdicionarDados from './pages/AdicionarDados';
+import PesquisaUsuario from './pages/PesquisaUsuario';
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
   {
     path: '/parecer-social',
     element: <ParecerSocial />,
+  },
+  {
+    path: '/pesquisa',
+    element: <PesquisaUsuario />,
   },
 
 ]);

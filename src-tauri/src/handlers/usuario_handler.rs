@@ -19,3 +19,10 @@ pub async fn get_usuario_by_id(pool: State<'_, PgPool>, id: String) -> Result<Us
         .await
         .map_err(|e| e.to_string())
 }
+
+#[tauri::command]
+pub async fn get_usuario_by_nome(pool: State<'_, PgPool>, nome: String) -> Result<Vec<Usuario>, String> {
+    UsuarioService::get_usuario_by_nome(&pool, &nome)
+        .await
+        .map_err(|e| e.to_string())
+}

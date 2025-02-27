@@ -1,8 +1,9 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Input, Button } from 'antd';
 import { LeftOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { msgErro, msgSucesso } from '../utils/message';
+import { invoke } from '@tauri-apps/api/core';
 
 const ParecerSocial: React.FC = () => {
   const navigate = useNavigate();
@@ -15,6 +16,13 @@ const ParecerSocial: React.FC = () => {
       return '';
     }
   });
+
+  useEffect(() => {
+
+    invoke('resize_current_window', { width: 800, height: 600 })
+      .then(() => console.log('Window resized successfully'))
+      .catch((error) => console.error('Failed to resize window:', error));
+  }, []);
 
   const handleSubmit = useCallback(async () => {
     try {

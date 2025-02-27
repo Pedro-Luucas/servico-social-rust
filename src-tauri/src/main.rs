@@ -36,6 +36,7 @@ let pool = match PgPool::connect(&database_url).await {
         .invoke_handler(tauri::generate_handler![
             handlers::usuario_handler::create_usuario,
             handlers::usuario_handler::get_usuario_by_id,
+            handlers::usuario_handler::get_usuario_by_nome,
             handlers::resize_handler::resize_current_window
         ])
         .run(tauri::generate_context!())

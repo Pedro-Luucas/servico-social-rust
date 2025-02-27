@@ -5,7 +5,7 @@ import { LeftOutlined, CloseOutlined } from '@ant-design/icons';
 import { useCheckbox } from '../utils/useCheckbox';
 import { User } from '../types';
 // @ts-ignore
-import { submitUsuario } from "../components/submitUsuario";
+import { submitUsuario } from "../utils/submitUsuario";
 // @ts-ignore
 import { editUsuario } from '../components/editUsuario';
 import { invoke } from '@tauri-apps/api/core';
@@ -39,6 +39,7 @@ const AdicionarDados: React.FC = () => {
     resp_escolaridade: null,
     resp_parentesco: null,
     resp_renda: null,
+
     fonte_renda: '',
     valor_renda: 0,
     moradia: '',
@@ -115,7 +116,7 @@ const AdicionarDados: React.FC = () => {
     setIsFormComplete(isComplete);
   }, [dados]);
 
-  // resize a window
+  // resize a janela the window faz os resize esse useEffect tlg
   useEffect(() => {
 
     invoke('resize_current_window', { width: 800, height: 1010 })
@@ -249,15 +250,16 @@ const handleSubmit = async (e: React.FormEvent) => {
   try {
     const isEditing = sessionStorage.getItem("edit") === "true";
     
-    //if (isEditing) {
-    //  setShowModalSubmit(false);
-    //  const result = await editUsuario();
-    //  navigate('/pesquisa')
-    //} else {
-    //  setShowModalSubmit(false);
-    //  const result = await submitUsuario();
-    //  navigate('/')
-    //}
+    if (isEditing) {
+      //setShowModalSubmit(false);
+      //const result = await editUsuario();
+      //navigate('/pesquisa')
+      console.log('workin gonit...')
+    } else {
+      setShowModalSubmit(false);
+      // Call the Rust backend with the user data
+      submitUsuario(dados)
+    }
     
   } catch (error) {
     console.error("Error submitting/editing user:", error);
@@ -331,6 +333,18 @@ const handleSubmit = async (e: React.FormEvent) => {
             />
           </div>
 
+          {/* Bens */}
+          <div className="flex flex-col">
+            <label className="text-lg">Bens Possuídos</label>
+            <Input
+              name="bens"
+              placeholder="Bens Possuídos"
+              value={dados.bens}
+              onChange={handleInputChange}
+              className="border rounded p-2 w-full text-lg"
+            />
+          </div>
+
           {/* Água */}
           <div className="flex flex-col">
             <label className="text-lg">Tipo de Abastecimento de Água</label>
@@ -344,6 +358,18 @@ const handleSubmit = async (e: React.FormEvent) => {
                 { value: 'poco-ou-nascente', label: 'poço ou nascente' },
                 { value: 'outros', label: 'outros' },
               ]}
+            />
+          </div>
+
+          <div className="flex flex-col">
+            <label className="text-lg">Valor da Água</label>
+            <Input
+              name="agua_valor"
+              placeholder="Valor da Água"
+              type="number"
+              value={dados.agua_valor}
+              onChange={handleInputChange}
+              className="border rounded p-2 w-full text-lg"
             />
           </div>
 
@@ -375,17 +401,7 @@ const handleSubmit = async (e: React.FormEvent) => {
             />
           </div>
 
-          {/* Bens */}
-          <div className="flex flex-col">
-            <label className="text-lg">Bens Possuídos</label>
-            <Input
-              name="bens"
-              placeholder="Bens Possuídos"
-              value={dados.bens}
-              onChange={handleInputChange}
-              className="border rounded p-2 w-full text-lg"
-            />
-          </div>
+        
 
           {/* CRAS Section */}
           <div className="flex flex-col">

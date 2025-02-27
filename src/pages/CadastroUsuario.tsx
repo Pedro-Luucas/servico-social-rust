@@ -158,14 +158,14 @@ const CadastroUsuario: React.FC<UserFormProps> = ({ onSubmit, initialData }) => 
   }) => {
     setFormData((prev: User) => ({
       ...prev,
-      respNome: responsavelData.nome,
-      respCpf: responsavelData.cpf,
-      respIdade: responsavelData.idade,
-      respTelefone: responsavelData.telefone,
-      respProfissao: responsavelData.profissao,
-      respEscolaridade: responsavelData.escolaridade,
-      respParentesco: responsavelData.parentesco,
-      respRenda: responsavelData.renda
+      resp_nome: responsavelData.nome,
+      resp_cpf: responsavelData.cpf,
+      resp_idade: responsavelData.idade,
+      resp_telefone: responsavelData.telefone,
+      resp_profissao: responsavelData.profissao,
+      resp_escolaridade: responsavelData.escolaridade,
+      resp_parentesco: responsavelData.parentesco,
+      resp_renda: responsavelData.renda
     }));
     handleToggleModal('responsavel', false);
   }, [handleToggleModal]);

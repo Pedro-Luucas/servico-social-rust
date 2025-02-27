@@ -65,4 +65,8 @@ impl UsuarioService {
     pub async fn get_usuario_by_id(pool: &PgPool, id: Uuid) -> Result<Usuario, sqlx::Error> {
         UsuarioRepository::find_by_id(pool, id).await
     }
+
+    pub async fn get_usuario_by_nome(pool: &PgPool, nome: &str) -> Result<Vec<Usuario>, sqlx::Error> {
+        UsuarioRepository::find_by_nome(pool, nome).await
+    }
 }

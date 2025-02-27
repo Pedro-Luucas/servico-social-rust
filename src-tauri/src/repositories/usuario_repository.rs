@@ -107,4 +107,35 @@ impl UsuarioRepository {
 
         Ok(())
     }
+
+
+    pub async fn find_by_nome(pool: &PgPool, nome: &str) -> Result<Vec<Usuario>, sqlx::Error> {
+        let usuarios = sqlx::query_as!(
+            Usuario,
+            r#"
+            SELECT 
+                id, nome, ativo, cpf, rg as "rg?", data_nasc, telefone, profissao as "profissao?", 
+                escolaridade, patologia, cep as "cep?", municipio, bairro as "bairro?", 
+                rua as "rua?", numero as "numero?", referencia as "referencia?", resp_nome as "resp_nome?", 
+                resp_cpf as "resp_cpf?", resp_idade as "resp_idade?", resp_telefone as "resp_telefone?", 
+                resp_profissao as "resp_profissao?", resp_escolaridade as "resp_escolaridade?", 
+                resp_parentesco as "resp_parentesco?", resp_renda as "resp_renda?", fonte_renda, 
+                valor_renda as "valor_renda?", moradia, agua, agua_valor as "agua_valor?", energia, 
+                energia_valor as "energia_valor?", bens as "bens?", 
+                internet, cras, acesso_cras as "acesso_cras?", desc_doenca as "desc_doenca?", 
+                medicamentos as "medicamentos?", medicamentos_gasto as "medicamentos_gasto?", 
+                tratamento as "tratamento?", nutri, tempo_tratamento as "tempo_tratamento?", 
+                local as "local?", encaminhamento as "encaminhamento?", 
+                solicitacoes, motivo_desligamento as "motivo_desligamento?", parecer_social, operador_id as "operador_id?"
+            FROM usuarios
+            WHERE nome ILIKE $1
+            "#,
+            format!("%{}%", nome)  // Using ILIKE with wildcards for partial name matching
+        )
+        .fetch_all(pool)
+        .await?;
+    
+        Ok(usuarios)
+    }
+    
 }
