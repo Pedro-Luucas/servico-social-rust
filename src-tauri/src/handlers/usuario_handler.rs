@@ -26,3 +26,24 @@ pub async fn get_usuario_by_nome(pool: State<'_, PgPool>, nome: String) -> Resul
         .await
         .map_err(|e| e.to_string())
 }
+
+#[tauri::command]
+pub async fn get_usuario_by_telefone(pool: State<'_, PgPool>, telefone: String) -> Result<Vec<Usuario>, String> {
+    UsuarioService::get_usuario_by_telefone(&pool, &telefone)
+        .await
+        .map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub async fn get_usuario_by_cep(pool: State<'_, PgPool>, cep: String) -> Result<Vec<Usuario>, String> {
+    UsuarioService::get_usuario_by_cep(&pool, &cep)
+        .await
+        .map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub async fn get_usuario_by_cpf(pool: State<'_, PgPool>, cpf: String) -> Result<Vec<Usuario>, String> {
+    UsuarioService::get_usuario_by_cpf(&pool, &cpf)
+        .await
+        .map_err(|e| e.to_string())
+}

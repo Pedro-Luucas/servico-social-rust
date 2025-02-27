@@ -138,4 +138,92 @@ impl UsuarioRepository {
         Ok(usuarios)
     }
     
+
+    pub async fn find_by_telefone(pool: &PgPool, telefone: &str) -> Result<Vec<Usuario>, sqlx::Error> {
+        let usuarios = sqlx::query_as!(
+            Usuario,
+            r#"
+            SELECT 
+                id, nome, ativo, cpf, rg as "rg?", data_nasc, telefone, profissao as "profissao?", 
+                escolaridade, patologia, cep as "cep?", municipio, bairro as "bairro?", 
+                rua as "rua?", numero as "numero?", referencia as "referencia?", resp_nome as "resp_nome?", 
+                resp_cpf as "resp_cpf?", resp_idade as "resp_idade?", resp_telefone as "resp_telefone?", 
+                resp_profissao as "resp_profissao?", resp_escolaridade as "resp_escolaridade?", 
+                resp_parentesco as "resp_parentesco?", resp_renda as "resp_renda?", fonte_renda, 
+                valor_renda as "valor_renda?", moradia, agua, agua_valor as "agua_valor?", energia, 
+                energia_valor as "energia_valor?", bens as "bens?", 
+                internet, cras, acesso_cras as "acesso_cras?", desc_doenca as "desc_doenca?", 
+                medicamentos as "medicamentos?", medicamentos_gasto as "medicamentos_gasto?", 
+                tratamento as "tratamento?", nutri, tempo_tratamento as "tempo_tratamento?", 
+                local as "local?", encaminhamento as "encaminhamento?", 
+                solicitacoes, motivo_desligamento as "motivo_desligamento?", parecer_social, operador_id as "operador_id?"
+            FROM usuarios
+            WHERE telefone LIKE $1
+            "#,
+            format!("%{}%", telefone)
+        )
+        .fetch_all(pool)
+        .await?;
+    
+        Ok(usuarios)
+    }
+    
+    pub async fn find_by_cep(pool: &PgPool, cep: &str) -> Result<Vec<Usuario>, sqlx::Error> {
+        let usuarios = sqlx::query_as!(
+            Usuario,
+            r#"
+            SELECT 
+                id, nome, ativo, cpf, rg as "rg?", data_nasc, telefone, profissao as "profissao?", 
+                escolaridade, patologia, cep as "cep?", municipio, bairro as "bairro?", 
+                rua as "rua?", numero as "numero?", referencia as "referencia?", resp_nome as "resp_nome?", 
+                resp_cpf as "resp_cpf?", resp_idade as "resp_idade?", resp_telefone as "resp_telefone?", 
+                resp_profissao as "resp_profissao?", resp_escolaridade as "resp_escolaridade?", 
+                resp_parentesco as "resp_parentesco?", resp_renda as "resp_renda?", fonte_renda, 
+                valor_renda as "valor_renda?", moradia, agua, agua_valor as "agua_valor?", energia, 
+                energia_valor as "energia_valor?", bens as "bens?", 
+                internet, cras, acesso_cras as "acesso_cras?", desc_doenca as "desc_doenca?", 
+                medicamentos as "medicamentos?", medicamentos_gasto as "medicamentos_gasto?", 
+                tratamento as "tratamento?", nutri, tempo_tratamento as "tempo_tratamento?", 
+                local as "local?", encaminhamento as "encaminhamento?", 
+                solicitacoes, motivo_desligamento as "motivo_desligamento?", parecer_social, operador_id as "operador_id?"
+            FROM usuarios
+            WHERE cep LIKE $1
+            "#,
+            format!("%{}%", cep)
+        )
+        .fetch_all(pool)
+        .await?;
+    
+        Ok(usuarios)
+    }
+    
+    pub async fn find_by_cpf(pool: &PgPool, cpf: &str) -> Result<Vec<Usuario>, sqlx::Error> {
+        let usuarios = sqlx::query_as!(
+            Usuario,
+            r#"
+            SELECT 
+                id, nome, ativo, cpf, rg as "rg?", data_nasc, telefone, profissao as "profissao?", 
+                escolaridade, patologia, cep as "cep?", municipio, bairro as "bairro?", 
+                rua as "rua?", numero as "numero?", referencia as "referencia?", resp_nome as "resp_nome?", 
+                resp_cpf as "resp_cpf?", resp_idade as "resp_idade?", resp_telefone as "resp_telefone?", 
+                resp_profissao as "resp_profissao?", resp_escolaridade as "resp_escolaridade?", 
+                resp_parentesco as "resp_parentesco?", resp_renda as "resp_renda?", fonte_renda, 
+                valor_renda as "valor_renda?", moradia, agua, agua_valor as "agua_valor?", energia, 
+                energia_valor as "energia_valor?", bens as "bens?", 
+                internet, cras, acesso_cras as "acesso_cras?", desc_doenca as "desc_doenca?", 
+                medicamentos as "medicamentos?", medicamentos_gasto as "medicamentos_gasto?", 
+                tratamento as "tratamento?", nutri, tempo_tratamento as "tempo_tratamento?", 
+                local as "local?", encaminhamento as "encaminhamento?", 
+                solicitacoes, motivo_desligamento as "motivo_desligamento?", parecer_social, operador_id as "operador_id?"
+            FROM usuarios
+            WHERE cpf LIKE $1
+            "#,
+            format!("%{}%", cpf)
+        )
+        .fetch_all(pool)
+        .await?;
+    
+        Ok(usuarios)
+    }
+    
 }

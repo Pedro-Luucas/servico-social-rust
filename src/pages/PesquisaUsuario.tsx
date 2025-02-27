@@ -4,6 +4,7 @@ import { escolaridades, User } from '../types';
 import { DiffOutlined, EditOutlined, EyeOutlined, FilePdfOutlined, LeftOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { invoke } from '@tauri-apps/api/core';
+import { pesquisar } from '../utils/pesquisar';
 
 const { Text } = Typography;
 
@@ -30,7 +31,7 @@ const PesquisaUsuario: React.FC = () => {
   // resize a janela the window faz os resize esse useEffect tlg
   useEffect(() => {
 
-    invoke('resize_current_window', { width: 1200, height: 600 })
+    invoke('resize_current_window', { width: 1250, height: 650 })
       .then(() => console.log('Window resized successfully'))
       .catch((error) => console.error('Failed to resize window:', error));
   }, []);
@@ -41,7 +42,7 @@ const PesquisaUsuario: React.FC = () => {
     setError(null);
     if (search.length > 2) {
       try {
-        const data = await invoke('get_usuario_by_nome', { nome: search });
+        const data = await pesquisar(tipoPesquisa, search);
         setResponseData(data);
       } catch (err: any) {
         if (err.message === 'Nenhum resultado encontrado para a pesquisa.') {
