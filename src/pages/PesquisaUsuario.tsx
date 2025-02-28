@@ -69,9 +69,10 @@ const PesquisaUsuario: React.FC = () => {
 
 //DETALHES USUARIO
   const detalhes = (id: string | undefined) => {
-    //if(id){
-    //navigate("/detalhes/"+id)
-    //}
+    if(id){
+    console.log(id, 'ID UUID')
+    navigate("/detalhes/"+id)
+    }
   }
   
   const editarUsuario = (user: User) => {
@@ -115,19 +116,18 @@ const PesquisaUsuario: React.FC = () => {
           dataSource={responseData}
           renderItem={(u: User) => (
             <List.Item>
-              <Card
-                title={u.nome}
-
-                extra={
-                  <div className="flex">
-                    <Button type='text' icon={<EyeOutlined />} onClick={() => {detalhes(u.id)}} />
-                    <Button type='text' icon={<EditOutlined />} onClick={() => {editarUsuario(u)}} />
-                    <Button type='text' icon={<DiffOutlined />} onClick={() => {adicionarRegistroAtendimento(u.id)}} />
-                    <Button type='text' icon={<FilePdfOutlined />} onClick={() => {anexarDocumentos(u.id)}} />
+              <Card className="w-full">
+                <div className="flex justify-between items-start mb-3">
+                  <div className="max-w-[60%]">
+                    <p className="font-bold text-base truncate">{u.nome}</p>
                   </div>
-                }
-                className="w-full"
-              >
+                  <div className="flex flex-wrap justify-end">
+                    <Button type='text' size="small" icon={<EyeOutlined />} onClick={() => {detalhes(u.id)}} />
+                    <Button type='text' size="small" icon={<EditOutlined />} onClick={() => {editarUsuario(u)}} />
+                    <Button type='text' size="small" icon={<DiffOutlined />} onClick={() => {adicionarRegistroAtendimento(u.id)}} />
+                    <Button type='text' size="small" icon={<FilePdfOutlined />} onClick={() => {anexarDocumentos(u.id)}} />
+                  </div>
+                </div>
                 <p className="text-sm lg:text-base">{ativo[u.ativo]}</p>
                 <p className="text-sm lg:text-base">{u.cpf}</p>
                 <p className="text-sm lg:text-base">{u.telefone}</p>

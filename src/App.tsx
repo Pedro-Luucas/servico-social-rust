@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import ParecerSocial from './pages/ParecerSocial';
 import AdicionarDados from './pages/AdicionarDados';
 import PesquisaUsuario from './pages/PesquisaUsuario';
+import DetalhesUsuario from './pages/DetalhesUsuario';
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
   {
     path: '/pesquisa',
     element: <PesquisaUsuario />,
+  },
+  {
+    path: '/detalhes/:id',
+    element: <DetalhesUsuario />,
   },
 
 ]);

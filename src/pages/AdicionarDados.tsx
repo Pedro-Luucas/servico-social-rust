@@ -1,19 +1,59 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Input, Select, Checkbox, Button, Modal } from 'antd';
+import { Input, Select, Checkbox, Button, Modal, Card } from 'antd';
 import { LeftOutlined, CloseOutlined } from '@ant-design/icons';
 import { useCheckbox } from '../utils/useCheckbox';
 import { User } from '../types';
+import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 // @ts-ignore
 import { submitUsuario } from "../utils/submitUsuario";
 // @ts-ignore
 import { editUsuario } from '../components/editUsuario';
 import { invoke } from '@tauri-apps/api/core';
 
+// Define field types for form sections
+interface BaseField {
+  label: string;
+  type: string;
+}
+
+interface InputField extends BaseField {
+  type: 'input';
+  name: keyof User;
+  inputType?: string;
+}
+
+interface SelectField extends BaseField {
+  type: 'select';
+  name: keyof User;
+  options: Array<{ value: string; label: string }>;
+}
+
+interface CheckboxField extends BaseField {
+  type: 'checkbox';
+  checked: boolean;
+  toggle: (e: CheckboxChangeEvent) => void; 
+  text: string;
+}
+
+interface CheckboxGroupField extends BaseField {
+  type: 'checkboxGroup';
+  options: Array<{
+    label: string;
+    checked: boolean;
+    toggle: (e: CheckboxChangeEvent) => void;
+  }>;
+}
+
+type FormField = InputField | SelectField | CheckboxField | CheckboxGroupField;
+
+interface FormSection {
+  title: string;
+  fields: FormField[];
+}
 
 const AdicionarDados: React.FC = () => {
   
-
   const [dados, setDados] = useState<User>({
     nome: '',
     ativo: 0,
@@ -118,13 +158,10 @@ const AdicionarDados: React.FC = () => {
 
   // resize a janela the window faz os resize esse useEffect tlg
   useEffect(() => {
-
     invoke('resize_current_window', { width: 800, height: 1010 })
       .then(() => console.log('Window resized successfully'))
       .catch((error) => console.error('Failed to resize window:', error));
   }, []);
-
-
 
 
 //------------------------------------CHECKBOXES------------------------------------
@@ -203,9 +240,6 @@ const AdicionarDados: React.FC = () => {
     }
   }, [dados]);
 
-
-
-
 //HANDLE AS COISA
   //modal de aviso
   const [showModalExit, setShowModalExit] = useState(false);
@@ -267,300 +301,271 @@ const handleSubmit = async (e: React.FormEvent) => {
   }
 };
 
+// Define form sections for better organization
+const formSections: FormSection[] = [
+  {
+    title: "Informações Financeiras",
+    fields: [
+      {
+        label: "Fonte de renda familiar",
+        type: "select",
+        name: "fonte_renda",
+        options: [
+          { value: 'emprego-formal', label: 'emp. formal' },
+          { value: 'emprego-informal', label: 'emp. informal' },
+          { value: 'aposentado-invalidez', label: 'aposentado por invalidez' },
+          { value: 'aposentado-contribuicao', label: 'aposentado por tempo de contribuição' },
+          { value: 'pensao-morte', label: 'pensão por morte' },
+          { value: 'auxilio-doenca', label: 'auxilio doença' },
+          { value: 'BPC-LOAS', label: 'BPC/LOAS' },
+          { value: 'bolsa-familia', label: 'bolsa familia' },
+        ]
+      },
+      {
+        label: "Valor da Renda",
+        type: "input",
+        name: "valor_renda",
+        inputType: "number"
+      },
+      {
+        label: "Bens Possuídos",
+        type: "input",
+        name: "bens"
+      },
+      {
+        label: "Tipo de Moradia",
+        type: "select",
+        name: "moradia",
+        options: [
+          { value: 'propria', label: 'Casa própria' },
+          { value: 'alugada', label: 'Casa alugada' },
+          { value: 'cedida', label: 'Casa cedida' },
+          { value: 'financiada', label: 'Casa financiada' },
+        ]
+      }
+    ]
+  },
+  {
+    title: "Serviços",
+    fields: [
+      {
+        label: "Tipo de Abastecimento de Água",
+        type: "select",
+        name: "agua",
+        options: [
+          { value: 'rede-publica', label: 'rede pública' },
+          { value: 'poco-ou-nascente', label: 'poço ou nascente' },
+          { value: 'outros', label: 'outros' },
+        ]
+      },
+      {
+        label: "Valor da Água",
+        type: "input",
+        name: "agua_valor",
+        inputType: "number"
+      },
+      {
+        label: "Tipo de Abastecimento de Energia",
+        type: "select",
+        name: "energia",
+        options: [
+          { value: 'celesc', label: 'celesc' },
+          { value: 'cooperativa', label: 'cooperativa' },
+          { value: 'irregular', label: 'irregular' },
+        ]
+      },
+      {
+        label: "Valor da Energia",
+        type: "input",
+        name: "energia_valor",
+        inputType: "number"
+      },
+      {
+        label: "Internet",
+        type: "checkbox",
+        checked: isNet,
+        toggle: toggleNet,
+        text: "Usuário tem acesso à internet?"
+      }
+    ]
+  },
+  {
+    title: "Assistência Social",
+    fields: [
+      {
+        label: "CRAS",
+        type: "checkbox",
+        checked: isCRAS,
+        toggle: toggleCRAS,
+        text: "Usuário é acompanhado pelo CRAS?"
+      },
+      {
+        label: "Acesso ao CRAS",
+        type: "input",
+        name: "acesso_cras"
+      }
+    ]
+  },
+  {
+    title: "Informações Médicas",
+    fields: [
+      {
+        label: "Descrição da Doença",
+        type: "input",
+        name: "desc_doenca"
+      },
+      {
+        label: "Medicamentos Usados",
+        type: "input",
+        name: "medicamentos"
+      },
+      {
+        label: "Gasto com Medicamentos",
+        type: "input",
+        name: "medicamentos_gasto",
+        inputType: "number"
+      }
+    ]
+  },
+  {
+    title: "Tratamento",
+    fields: [
+      {
+        label: "Tratamento Médico",
+        type: "checkboxGroup",
+        options: tratamentos.map((tratamento, index) => ({
+          label: tratamento.charAt(0).toUpperCase() + tratamento.slice(1),
+          checked: tratamentoCheckboxes[index].checked,
+          toggle: tratamentoCheckboxes[index].toggle
+        }))
+      },
+      {
+        label: "Nutrição",
+        type: "input",
+        name: "nutri"
+      },
+      {
+        label: "Tempo de Tratamento",
+        type: "input",
+        name: "tempo_tratamento"
+      },
+      {
+        label: "Local do Tratamento",
+        type: "input",
+        name: "local"
+      },
+      {
+        label: "Encaminhamento",
+        type: "input",
+        name: "encaminhamento"
+      }
+    ]
+  }
+];
 
   return (
-    <div className="container mx-auto p-4 md:p-8">
-      <h1 className="text-2xl md:text-4xl font-bold mb-4 md:mb-8 text-center ">
+    <div className="container mx-auto my-5">
+      <h1 className="text-2xl md:text-4xl font-bold mb-4 md:mb-8 text-center">
         Adicionar Dados para o Usuário
       </h1>
-      <div className="max-w-3xl mx-auto mb-10 bg-white p-6  ">
-        <div className="flex flex-row justify-between mx-8">
+      
+      <div className="bg-white p-4 rounded-lg w-full max-w-7xl mx-auto max-h-[90vh]">
+        <div className="flex justify-between items-center mb-6 p-2 border-b">
           <Button type='text' icon={<LeftOutlined />} onClick={handleVoltar} />
-          <Button icon={<CloseOutlined />} onClick={() => {setShowModalExit(true)}} className='self-start' />
+          <h2 className="text-xl font-bold">Dados do Usuario</h2>
+          <Button icon={<CloseOutlined />} onClick={() => {setShowModalExit(true)}} />
         </div>
         
-
-        <form onSubmit={handleFormSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-          {/* Fonte de Renda */}
-          <div className="flex flex-col">
-            <label className="text-lg">Fonte de renda familiar</label>
-            <Select
-              placeholder="Fonte de Renda"
-              value={dados.fonte_renda}
-              onChange={(value) => handleSelectChange('fonte_renda', value)}
-              className="w-full"
-              options={[
-                { value: 'emprego-formal', label: 'emp. formal' },
-                { value: 'emprego-informal', label: 'emp. informal' },
-                { value: 'aposentado-invalidez', label: 'aposentado por invalidez' },
-                { value: 'aposentado-contribuicao', label: 'aposentado por tempo de contribuição' },
-                { value: 'pensao-morte', label: 'pensão por morte' },
-                { value: 'auxilio-doenca', label: 'auxilio doença' },
-                { value: 'BPC-LOAS', label: 'BPC/LOAS' },
-                { value: 'bolsa-familia', label: 'bolsa familia' },
-              ]}
-            />
-          </div>
-
-          {/* Valor da Renda */}
-          <div className="flex flex-col">
-            <label className="text-lg">Valor da Renda</label>
-            <Input
-              name="valor_renda"
-              placeholder="Valor da Renda"
-              type="number"
-              value={dados.valor_renda}
-              onChange={handleInputChange}
-              className="border rounded p-2 w-full text-lg"
-            />
-          </div>
-
-          {/* Moradia */}
-          <div className="flex flex-col">
-            <label className="text-lg">Tipo de Moradia</label>
-            <Select
-              placeholder="Moradia"
-              onChange={(value) => handleSelectChange('moradia', value)}
-              className="w-full"
-              value={dados.moradia || undefined} 
-              options={[
-                { value: 'propria', label: 'Casa própria' },
-                { value: 'alugada', label: 'Casa alugada' },
-                { value: 'cedida', label: 'Casa cedida' },
-                { value: 'financiada', label: 'Casa financiada' },
-              ]}
-            />
-          </div>
-
-          {/* Bens */}
-          <div className="flex flex-col">
-            <label className="text-lg">Bens Possuídos</label>
-            <Input
-              name="bens"
-              placeholder="Bens Possuídos"
-              value={dados.bens}
-              onChange={handleInputChange}
-              className="border rounded p-2 w-full text-lg"
-            />
-          </div>
-
-          {/* Água */}
-          <div className="flex flex-col">
-            <label className="text-lg">Tipo de Abastecimento de Água</label>
-            <Select
-              placeholder="Tipo de Abastecimento de Água"
-              onChange={(value) => handleSelectChange('agua', value)}
-              className="w-full"
-              value={dados.agua || undefined} 
-              options={[
-                { value: 'rede-publica', label: 'rede pública' },
-                { value: 'poco-ou-nascente', label: 'poço ou nascente' },
-                { value: 'outros', label: 'outros' },
-              ]}
-            />
-          </div>
-
-          <div className="flex flex-col">
-            <label className="text-lg">Valor da Água</label>
-            <Input
-              name="agua_valor"
-              placeholder="Valor da Água"
-              type="number"
-              value={dados.agua_valor}
-              onChange={handleInputChange}
-              className="border rounded p-2 w-full text-lg"
-            />
-          </div>
-
-          {/* Energia */}
-          <div className="flex flex-col">
-            <label className="text-lg">Tipo de Abastecimento de Energia</label>
-            <Select
-              placeholder="Tipo de Abastecimento de Energia"
-              onChange={(value) => handleSelectChange('energia', value)}
-              className="w-full"
-              value={dados.energia || undefined} 
-              options={[
-                { value: 'celesc', label: 'celesc' },
-                { value: 'cooperativa', label: 'cooperativa' },
-                { value: 'irregular', label: 'irregular' },
-              ]}
-            />
-          </div>
-          
-          <div className="flex flex-col">
-            <label className="text-lg">Valor da Energia</label>
-            <Input
-              name="energia_valor"
-              placeholder="Valor da Energia"
-              type="number"
-              value={dados.energia_valor}
-              onChange={handleInputChange}
-              className="border rounded p-2 w-full text-lg"
-            />
-          </div>
-
-        
-
-          {/* CRAS Section */}
-          <div className="flex flex-col">
-            <label className="text-lg">CRAS</label>
-            <Checkbox checked={isCRAS} onChange={toggleCRAS}>
-              Usuário é acompanhado pelo CRAS? {isCRAS ? 'Sim' : 'Não'}
-            </Checkbox>
-            
-            <label className="text-lg mt-2">Acesso ao CRAS</label>
-            <Input
-              name="acesso_cras"
-              placeholder="Acesso ao CRAS"
-              value={dados.acesso_cras}
-              onChange={handleInputChange}
-              className="border rounded p-2 w-full text-lg"
-            />
-          </div>
-
-          {/* Internet */}
-          <div className="flex flex-col">
-            <label className="text-lg">Internet</label>
-            <Checkbox checked={isNet} onChange={toggleNet}>
-              Usuário tem acesso à internet? {isNet ? 'Sim' : 'Não'}
-            </Checkbox>
-          </div>
-
-          {/* Doenças */}
-          <div className="flex flex-col">
-            <label className="text-lg">Descrição da Doença</label>
-            <Input
-              name="desc_doenca"
-              placeholder="Descrição da Doença"
-              value={dados.desc_doenca}
-              onChange={handleInputChange}
-              className="border rounded p-2 w-full text-lg"
-            />
-          </div>
-
-          {/* Medicamentos */}
-          <div className="flex flex-col">
-            <label className="text-lg">Medicamentos Usados</label>
-            <Input
-              name="medicamentos"
-              placeholder="Medicamentos Usados"
-              value={dados.medicamentos}
-              onChange={handleInputChange}
-              className="border rounded p-2 w-full text-lg"
-            />
-          </div>
-
-          {/* Gastos com Medicamentos */}
-          <div className="flex flex-col">
-            <label className="text-lg">Gasto com Medicamentos</label>
-            <Input
-              name="medicamentos_gasto"
-              placeholder="Gasto com Medicamentos"
-              type="number"
-              value={dados.medicamentos_gasto}
-              onChange={handleInputChange}
-              className="border rounded p-2 w-full text-lg"
-            />
-          </div>
-
-          {/* Tratamento */}
-          <div className="flex flex-col">
-            <label className="text-lg">Tratamento Médico</label>
-            {tratamentos.map((tratamento, index) => (
-              <Checkbox
-                key={tratamento}
-                checked={tratamentoCheckboxes[index].checked}
-                onChange={tratamentoCheckboxes[index].toggle}
-              >
-                {tratamento.charAt(0).toUpperCase() + tratamento.slice(1)}
-              </Checkbox>
+        <form onSubmit={handleFormSubmit}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 p-4">
+            {formSections.map((section, sectionIndex) => (
+              <Card key={sectionIndex} className="p-4">
+                <h3 className="font-semibold mb-3">{section.title}</h3>
+                <div className="space-y-4">
+                  {section.fields.map((field, fieldIndex) => (
+                    <div key={fieldIndex} className="mb-2">
+                      <label className="text-sm text-gray-500">{field.label}</label>
+                      
+                      {field.type === 'input' && (
+                        <Input
+                          name={field.name}
+                          placeholder={field.label}
+                          type={field.inputType || "text"}
+                          value={dados[field.name] !== null && dados[field.name] !== undefined ? String(dados[field.name]) : ''}
+                          onChange={handleInputChange}
+                          className="border rounded p-2 w-full"
+                        />
+                      )}
+                      
+                      {field.type === 'select' && (
+                        <Select
+                          placeholder={field.label}
+                          value={dados[field.name] as string || undefined}
+                          onChange={(value) => handleSelectChange(field.name, value)}
+                          className="w-full"
+                          options={field.options}
+                        />
+                      )}
+                      
+                      {field.type === 'checkbox' && (
+                        <Checkbox checked={field.checked} onChange={field.toggle}>
+                          {field.text} {field.checked ? 'Sim' : 'Não'}
+                        </Checkbox>
+                      )}
+                      
+                      {field.type === 'checkboxGroup' && (
+                        <div className="space-y-1">
+                          {field.options.map((option, optionIndex) => (
+                            <Checkbox
+                              key={optionIndex}
+                              checked={option.checked}
+                              onChange={option.toggle}
+                            >
+                              {option.label}
+                            </Checkbox>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </Card>
             ))}
           </div>
-
-          {/* Nutrição */}
-          <div className="flex flex-col">
-            <label className="text-lg">Nutrição</label>
-            <Input
-              name="nutri"
-              placeholder="Nutrição"
-              value={dados.nutri}
-              onChange={handleInputChange}
-              className="border rounded p-2 w-full text-lg"
-            />
-          </div>
-
-          {/* Tempo de Tratamento */}
-          <div className="flex flex-col">
-            <label className="text-lg">Tempo de Tratamento</label>
-            <Input
-              name="tempo_tratamento"
-              placeholder="Tempo de Tratamento"
-              value={dados.tempo_tratamento}
-              onChange={handleInputChange}
-              className="border rounded p-2 w-full text-lg"
-            />
-          </div>
-
-          {/* Local de Tratamento */}
-          <div className="flex flex-col">
-            <label className="text-lg">Local do Tratamento</label>
-            <Input
-              name="local"
-              placeholder="Local do Tratamento"
-              value={dados.local}
-              onChange={handleInputChange}
-              className="border rounded p-2 w-full text-lg"
-            />
-          </div>
-
-          {/* Encaminhamento */}
-          <div className="flex flex-col">
-            <label className="text-lg">Encaminhamento</label>
-            <Input
-              name="encaminhamento"
-              placeholder="Encaminhamento"
-              value={dados.encaminhamento}
-              onChange={handleInputChange}
-              className="border rounded p-2 w-full text-lg"
-            />
-          </div>
-
-          {/* Botão de Envio */}
-          <Button 
-            type="default" 
-            htmlType="submit" 
-            className="md:col-span-2 bg-blue-600 text-white p-3 md:p-6 w-full text-lg rounded mt-5"
-            disabled={!isFormComplete}
-          >
-            Enviar Dados
-          </Button>
-        </form>
-     
-
-            <Modal
-                  title="Voltar à pagina inicial?"
-                  open={showModalExit}
-                  onOk={backHome}
-                  onCancel={() => {setShowModalExit(false)}}
-                  okText="Ok"
-                  cancelText="Cancelar"
-                >
-                  <h1>As alterações não serão salvas! </h1>
-            </Modal>
-
-            <Modal
-              title={sessionStorage.getItem("edit") === "true" ? "Editar dados" : "Enviar dados"}
-              open={showModalSubmit}
-              onOk={handleSubmit}
-              onCancel={closeModalSubmit}
-              okText="Confirmar"
-              cancelText="Cancelar"
+          
+          <div className="flex justify-center mt-6 p-4">
+            <Button 
+              type="default" 
+              htmlType="submit" 
+              className="bg-blue-600 text-white p-3 w-full max-w-md text-lg mb-10"
+              disabled={!isFormComplete}
             >
-              <p>Tem certeza de que deseja {sessionStorage.getItem("edit") === "true" ? "editar" : "enviar"} os dados?</p>
-            </Modal>
-      
+              Enviar Dados
+            </Button>
+          </div>
+        </form>
+        
+        <Modal
+          title="Voltar à pagina inicial?"
+          open={showModalExit}
+          onOk={backHome}
+          onCancel={() => {setShowModalExit(false)}}
+          okText="Ok"
+          cancelText="Cancelar"
+        >
+          <h1>As alterações não serão salvas! </h1>
+        </Modal>
+
+        <Modal
+          title={sessionStorage.getItem("edit") === "true" ? "Editar dados" : "Enviar dados"}
+          open={showModalSubmit}
+          onOk={handleSubmit}
+          onCancel={closeModalSubmit}
+          okText="Confirmar"
+          cancelText="Cancelar"
+        >
+          <p>Tem certeza de que deseja {sessionStorage.getItem("edit") === "true" ? "editar" : "enviar"} os dados?</p>
+        </Modal>
       </div>
     </div>
   );
