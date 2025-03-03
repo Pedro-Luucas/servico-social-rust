@@ -40,7 +40,7 @@ const initialUserState: User = {
   resp_parentesco: null,
   resp_renda: null,
   fonte_renda: '',
-  valor_renda: 0,
+  valor_renda: '',
   moradia: '',
   agua: '',
   agua_valor: '',
@@ -52,7 +52,7 @@ const initialUserState: User = {
   acesso_cras: '',
   desc_doenca: '',
   medicamentos: '',
-  medicamentos_gasto: 0,
+  medicamentos_gasto: '',
   tratamento: '',
 
   nutri: '',
@@ -187,6 +187,7 @@ const CadastroUsuario: React.FC<UserFormProps> = ({ onSubmit, initialData }) => 
         value={formData[name] as string | number}
         onChange={handleChange}
         className="border rounded p-2 md:p-4 w-full text-lg"
+        autoComplete="off"
       />
     </div>
   );
@@ -201,7 +202,7 @@ const CadastroUsuario: React.FC<UserFormProps> = ({ onSubmit, initialData }) => 
           <Button icon={<LeftOutlined />} onClick={() => handleToggleModal('exit', true)} />
         </div>
 
-        <form onSubmit={e => { e.preventDefault(); onSubmit(formData); }} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <form onSubmit={e => { e.preventDefault(); onSubmit(formData); }} className="grid grid-cols-1 md:grid-cols-2 gap-4" autoComplete="off">
           {renderField('Nome', 'nome', true)}
           {renderField('Telefone', 'telefone', true)}
           {renderField('RG', 'rg')}
@@ -226,6 +227,8 @@ const CadastroUsuario: React.FC<UserFormProps> = ({ onSubmit, initialData }) => 
               onChange={v => handleSelectChange('escolaridade', v)}
               options={escolaridadeOptions}
               className="w-full text-lg"
+              dropdownStyle={{ zIndex: 1100 }}
+              autoClearSearchValue
             />
           </div>
 

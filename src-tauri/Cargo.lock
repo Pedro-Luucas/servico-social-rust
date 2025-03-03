@@ -472,8 +472,10 @@ checksum = "7e36cc9d416881d2e24f9a963be5fb1cd90966419ac844274161d10488b3e825"
 dependencies = [
  "android-tzdata",
  "iana-time-zone",
+ "js-sys",
  "num-traits",
  "serde",
+ "wasm-bindgen",
  "windows-targets 0.52.6",
 ]
 
@@ -3727,6 +3729,7 @@ dependencies = [
 name = "servicosocial"
 version = "0.1.0"
 dependencies = [
+ "chrono",
  "dotenv",
  "fern 0.6.2",
  "log",
@@ -3916,6 +3919,7 @@ dependencies = [
  "bitflags 1.3.2",
  "byteorder",
  "bytes",
+ "chrono",
  "crc",
  "crossbeam-queue",
  "dirs 4.0.0",
@@ -3949,6 +3953,7 @@ dependencies = [
  "sqlx-rt",
  "stringprep",
  "thiserror 1.0.69",
+ "time",
  "tokio-stream",
  "url",
  "uuid",

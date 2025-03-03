@@ -24,7 +24,7 @@ export interface User {
   resp_parentesco: string | null;
   resp_renda: string | null;
   fonte_renda: string;
-  valor_renda: number;
+  valor_renda: string;
   moradia: string;
   agua: string;
   agua_valor: string;
@@ -36,7 +36,7 @@ export interface User {
   acesso_cras: string;
   desc_doenca: string;
   medicamentos: string;
-  medicamentos_gasto: number;
+  medicamentos_gasto: string;
   tratamento: string;
   nutri: string;
   tempo_tratamento: string;

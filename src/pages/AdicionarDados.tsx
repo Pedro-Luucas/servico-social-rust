@@ -81,7 +81,7 @@ const AdicionarDados: React.FC = () => {
     resp_renda: null,
 
     fonte_renda: '',
-    valor_renda: 0,
+    valor_renda: '',
     moradia: '',
     agua: '',
     agua_valor: '',
@@ -93,7 +93,7 @@ const AdicionarDados: React.FC = () => {
     acesso_cras: '',
     desc_doenca: '',
     medicamentos: '',
-    medicamentos_gasto: 0,
+    medicamentos_gasto: '',
     tratamento: '',
 
     nutri: '',
@@ -142,14 +142,12 @@ const AdicionarDados: React.FC = () => {
   useEffect(() => {
     const isComplete = dados ? (
       dados.fonte_renda?.trim() !== '' &&
-      dados.valor_renda > 0 &&
       dados.moradia?.trim() !== '' &&
       dados.agua?.trim() !== '' &&
       dados.energia?.trim() !== '' &&
       dados.bens?.trim() !== '' &&
       dados.desc_doenca?.trim() !== '' &&
       dados.medicamentos?.trim() !== '' &&
-      dados.medicamentos_gasto > 0 &&
       dados.local?.trim() !== ''
     ) : false;
 
@@ -390,10 +388,10 @@ const formSections: FormSection[] = [
     ]
   },
   {
-    title: "Assistência Social",
+    title: "CRAS",
     fields: [
       {
-        label: "CRAS",
+        label: "acompanhado pelo CRAS",
         type: "checkbox",
         checked: isCRAS,
         toggle: toggleCRAS,
@@ -476,7 +474,7 @@ const formSections: FormSection[] = [
           <Button icon={<CloseOutlined />} onClick={() => {setShowModalExit(true)}} />
         </div>
         
-        <form onSubmit={handleFormSubmit}>
+        <form onSubmit={handleFormSubmit} autoComplete="off">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 p-4">
             {formSections.map((section, sectionIndex) => (
               <Card key={sectionIndex} className="p-4">

@@ -84,9 +84,9 @@ const PesquisaUsuario: React.FC = () => {
   }
 
   const adicionarRegistroAtendimento = (id: string | undefined) => {
-    //if(id) {
-    //  navigate('/registro-atendimento/'+id)
-    //}
+    if(id) {
+      navigate('/registro-atendimento/'+id)
+    }
   }
 
   const anexarDocumentos = (id: string | undefined) => {

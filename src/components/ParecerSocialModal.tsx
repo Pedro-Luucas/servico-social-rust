@@ -42,7 +42,6 @@ const ParecerSocialModal: React.FC<ParecerSocialModalProps> = ({
 
   return (
     <Modal
-      title="Parecer Social"
       open={open}
       onOk={handleSubmit}
       onCancel={handleCancel}

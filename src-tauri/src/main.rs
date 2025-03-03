@@ -43,7 +43,13 @@ let pool = match PgPool::connect(&database_url).await {
             handlers::usuario_handler::get_usuario_by_nome,
             handlers::usuario_handler::get_usuario_by_telefone,
             handlers::usuario_handler::get_usuario_by_cep,
-            handlers::usuario_handler::get_usuario_by_cpf
+            handlers::usuario_handler::get_usuario_by_cpf,
+
+            handlers::registro_handler::create_registro,
+            handlers::registro_handler::get_registro_by_id,
+            handlers::registro_handler::get_registros_by_usuario_id,
+            handlers::registro_handler::delete_registro,
+
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

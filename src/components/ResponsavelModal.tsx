@@ -71,7 +71,6 @@ const ResponsavelModal: React.FC<ResponsavelModalProps> = ({
         <Form.Item
           name="nome"
           label="Nome"
-          rules={[{ required: true, message: 'Por favor, insira o nome' }]}
         >
           <Input placeholder="Nome do responsável" />
         </Form.Item>
@@ -121,7 +120,6 @@ const ResponsavelModal: React.FC<ResponsavelModalProps> = ({
           <Form.Item
             name="escolaridade"
             label="Escolaridade"
-            rules={[{ required: true, message: 'Por favor, selecione a escolaridade' }]}
           >
             <Select placeholder="Selecione a escolaridade">
               <Select.Option value={0}>Ensino fundamental incompleto</Select.Option>
@@ -137,7 +135,6 @@ const ResponsavelModal: React.FC<ResponsavelModalProps> = ({
         <Form.Item
           name="parentesco"
           label="Parentesco"
-          rules={[{ required: true, message: 'Por favor, insira o parentesco' }]}
         >
           <Input placeholder="Parentesco (ex: Mãe, Pai, Irmão)" />
         </Form.Item>

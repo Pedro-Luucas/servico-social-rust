@@ -3,10 +3,10 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import CadastroUsuario from './pages/CadastroUsuario';
 import Home from './pages/Home';
-import ParecerSocial from './pages/ParecerSocial';
 import AdicionarDados from './pages/AdicionarDados';
 import PesquisaUsuario from './pages/PesquisaUsuario';
 import DetalhesUsuario from './pages/DetalhesUsuario';
+import RegistrosAtendimento from './pages/RegistrosAtendimento';
 
 const router = createBrowserRouter([
   {
@@ -22,16 +22,16 @@ const router = createBrowserRouter([
     element: <AdicionarDados />,
   },
   {
-    path: '/parecer-social',
-    element: <ParecerSocial />,
-  },
-  {
     path: '/pesquisa',
     element: <PesquisaUsuario />,
   },
   {
     path: '/detalhes/:id',
     element: <DetalhesUsuario />,
+  },
+  {
+    path: '/registro-atendimento/:id',
+    element: <RegistrosAtendimento />,
   },
 
 ]);
