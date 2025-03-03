@@ -5,6 +5,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import { LeftOutlined } from '@ant-design/icons';
 import EnderecoModal from '../components/EnderecoModal';
 import ResponsavelModal from '../components/ResponsavelModal';
+import ParecerSocialModal from '../components/ParecerSocialModal';
 import { User } from '../types';
 import { invoke } from '@tauri-apps/api/core';
 
@@ -84,16 +85,16 @@ const CadastroUsuario: React.FC<UserFormProps> = ({ onSubmit, initialData }) => 
   });
 
   useEffect(() => {
-
-      invoke('resize_current_window', { width: 800, height: 900 })
-        .then(() => console.log('Window resized successfully'))
-        .catch((error) => console.error('Failed to resize window:', error));
-    }, []);
+    invoke('resize_current_window', { width: 800, height: 900 })
+      .then(() => console.log('Window resized successfully'))
+      .catch((error) => console.error('Failed to resize window:', error));
+  }, []);
 
   const [showModals, setShowModals] = useState({
     exit: false,
     endereco: false,
     responsavel: false,
+    parecer: false,
   });
 
   const [data_nasc, setDataNasc] = useState<Dayjs | undefined>(
@@ -107,8 +108,6 @@ const CadastroUsuario: React.FC<UserFormProps> = ({ onSubmit, initialData }) => 
   useEffect(() => {
     sessionStorage.setItem('formData', JSON.stringify(formData));
   }, [formData]);
-
-
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -132,7 +131,6 @@ const CadastroUsuario: React.FC<UserFormProps> = ({ onSubmit, initialData }) => 
     rua: string;
     numero: string;
     referencia: string | null;
-
   }) => {
     setFormData((prev: User) => ({
       ...prev,
@@ -170,6 +168,16 @@ const CadastroUsuario: React.FC<UserFormProps> = ({ onSubmit, initialData }) => 
     handleToggleModal('responsavel', false);
   }, [handleToggleModal]);
 
+  const handleParecerSubmit = useCallback((parecerData: {
+    parecer_social: string;
+  }) => {
+    setFormData((prev: User) => ({
+      ...prev,
+      parecer_social: parecerData.parecer_social
+    }));
+    handleToggleModal('parecer', false);
+  }, [handleToggleModal]);
+
   const renderField = (label: string, name: keyof User, required = false) => (
     <div className="flex flex-col">
       <label className="text-lg">{label}{required && '*'}</label>
@@ -181,9 +189,9 @@ const CadastroUsuario: React.FC<UserFormProps> = ({ onSubmit, initialData }) => 
         className="border rounded p-2 md:p-4 w-full text-lg"
       />
     </div>
+  );
 
-    
-  );return (
+  return (
     <div className="container mx-auto p-4 md:p-8">
       <h1 className="text-2xl md:text-4xl font-bold mb-4 md:mb-8 text-center">Serviço Social</h1>
       <h1 className="md:text-2xl font-bold mb-4 md:mb-4 text-center">Cadastrar Usuário</h1>
@@ -218,7 +226,6 @@ const CadastroUsuario: React.FC<UserFormProps> = ({ onSubmit, initialData }) => 
               onChange={v => handleSelectChange('escolaridade', v)}
               options={escolaridadeOptions}
               className="w-full text-lg"
-             
             />
           </div>
 
@@ -242,8 +249,8 @@ const CadastroUsuario: React.FC<UserFormProps> = ({ onSubmit, initialData }) => 
 
           <Button
             type="primary"
-            onClick={() => {navigate('/parecer-social')}}
-            className="md:col-span-2 bg-blue-500 text-white p-2 md:p-4 "
+            onClick={() => handleToggleModal('parecer', true)}
+            className="md:col-span-2 bg-blue-500 text-white p-2 md:p-4 w-full text-lg rounded"
           >
             Adicionar Parecer Social
           </Button>
@@ -267,8 +274,6 @@ const CadastroUsuario: React.FC<UserFormProps> = ({ onSubmit, initialData }) => 
           >
             <Link to="/adicionar-dados" className="w-full block">Adicionar Dados</Link>
           </Button>
-
-          
         </form>
 
         <EnderecoModal
@@ -282,7 +287,6 @@ const CadastroUsuario: React.FC<UserFormProps> = ({ onSubmit, initialData }) => 
             rua: formData.rua,
             numero: formData.numero,
             referencia: formData.referencia
-
           }}
         />
 
@@ -299,6 +303,15 @@ const CadastroUsuario: React.FC<UserFormProps> = ({ onSubmit, initialData }) => 
             escolaridade: formData.resp_escolaridade,
             parentesco: formData.resp_parentesco,
             renda: formData.resp_renda
+          }}
+        />
+
+        <ParecerSocialModal
+          open={showModals.parecer}
+          onClose={() => handleToggleModal('parecer', false)}
+          onSave={handleParecerSubmit}
+          initialData={{
+            parecer_social: formData.parecer_social
           }}
         />
 
