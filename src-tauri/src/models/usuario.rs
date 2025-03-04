@@ -30,6 +30,7 @@ pub struct Usuario {
     pub fonte_renda: String,
     pub valor_renda: Option<f64>,
     pub moradia: String,
+    pub moradia_valor: Option<f64>,
     pub agua: String,
     pub agua_valor: Option<f64>,
     pub energia: String,
@@ -46,8 +47,10 @@ pub struct Usuario {
     pub tempo_tratamento: Option<String>,
     pub local: Option<String>,
     pub encaminhamento: Option<String>,
-    pub solicitacoes: String,
+    pub solicitacoes: Option<String>,
+    pub observacoes: Option<String>,
     pub motivo_desligamento: Option<String>,
     pub parecer_social: String,
     pub operador_id: Option<i64>,
+    
 }

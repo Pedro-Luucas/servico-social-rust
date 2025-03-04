@@ -58,6 +58,7 @@ export const submitUsuario = async (userData: User): Promise<void> => {
       parecer_social: userData.parecer_social,
 
       valor_renda: userData.valor_renda !== '' ? Number(userData.valor_renda) : null,
+      moradia_valor: userData.moradia_valor !== '' ? Number(userData.moradia_valor) : null,
       agua_valor: userData.agua_valor !== '' ? Number(userData.agua_valor) : null,
       energia_valor: userData.energia_valor !== '' ? Number(userData.energia_valor) : null,
       medicamentos_gasto: userData.medicamentos_gasto !== '' ? Number(userData.medicamentos_gasto) : null,

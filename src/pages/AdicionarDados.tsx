@@ -15,6 +15,7 @@ import { invoke } from '@tauri-apps/api/core';
 interface BaseField {
   label: string;
   type: string;
+  placeholder?: string;
 }
 
 interface InputField extends BaseField {
@@ -56,7 +57,7 @@ const AdicionarDados: React.FC = () => {
   
   const [dados, setDados] = useState<User>({
     nome: '',
-    ativo: 0,
+    ativo: 1,
     cpf: '',
     rg: null,
     data_nasc: '',
@@ -71,7 +72,7 @@ const AdicionarDados: React.FC = () => {
     numero: '',
     referencia: null,
     resp_nome: null,
-
+  
     resp_cpf: null,
     resp_idade: null,
     resp_telefone: null,
@@ -79,10 +80,10 @@ const AdicionarDados: React.FC = () => {
     resp_escolaridade: null,
     resp_parentesco: null,
     resp_renda: null,
-
     fonte_renda: '',
     valor_renda: '',
     moradia: '',
+    moradia_valor: '',
     agua: '',
     agua_valor: '',
     energia: '',
@@ -95,15 +96,16 @@ const AdicionarDados: React.FC = () => {
     medicamentos: '',
     medicamentos_gasto: '',
     tratamento: '',
-
+  
     nutri: '',
     tempo_tratamento: '',
     local: '',
     encaminhamento: '',
     solicitacoes: '',
+    observacoes: '',
     motivo_desligamento: '',
-    parecer_social: '',
-  });
+    parecer_social: ''
+  })
 
   const [isFormComplete, setIsFormComplete] = useState(false);
   const navigate = useNavigate();
@@ -289,8 +291,9 @@ const handleSubmit = async (e: React.FormEvent) => {
       console.log('workin gonit...')
     } else {
       setShowModalSubmit(false);
-      // Call the Rust backend with the user data
+      
       submitUsuario(dados)
+      navigate('/')
     }
     
   } catch (error) {
@@ -321,14 +324,50 @@ const formSections: FormSection[] = [
       },
       {
         label: "Valor da Renda",
+        placeholder: "valor da renda",
         type: "input",
         name: "valor_renda",
         inputType: "number"
       },
       {
+        label: "Valor da Moradia",
+        placeholder: "valor da moradia",
+        type: "input",
+        name: "moradia_valor",
+        inputType: "number"
+      },
+      {
+        label: "Valor da Água",
+        placeholder: "valor da água",
+        type: "input",
+        name: "agua_valor",
+        inputType: "number"
+      },
+      {
+        label: "Valor da Energia",
+        placeholder: "valor da energia",
+        type: "input",
+        name: "energia_valor",
+        inputType: "number"
+      },
+      {
         label: "Bens Possuídos",
+        placeholder: "bens possuídos",
         type: "input",
         name: "bens"
+      },
+      
+    ]
+  },
+  {
+    title: "Serviços",
+    fields: [
+      {
+        label: "Internet",
+        type: "checkbox",
+        checked: isNet,
+        toggle: toggleNet,
+        text: "Usuário tem acesso à internet?"
       },
       {
         label: "Tipo de Moradia",
@@ -340,12 +379,7 @@ const formSections: FormSection[] = [
           { value: 'cedida', label: 'Casa cedida' },
           { value: 'financiada', label: 'Casa financiada' },
         ]
-      }
-    ]
-  },
-  {
-    title: "Serviços",
-    fields: [
+      },
       {
         label: "Tipo de Abastecimento de Água",
         type: "select",
@@ -356,12 +390,7 @@ const formSections: FormSection[] = [
           { value: 'outros', label: 'outros' },
         ]
       },
-      {
-        label: "Valor da Água",
-        type: "input",
-        name: "agua_valor",
-        inputType: "number"
-      },
+      
       {
         label: "Tipo de Abastecimento de Energia",
         type: "select",
@@ -372,19 +401,9 @@ const formSections: FormSection[] = [
           { value: 'irregular', label: 'irregular' },
         ]
       },
-      {
-        label: "Valor da Energia",
-        type: "input",
-        name: "energia_valor",
-        inputType: "number"
-      },
-      {
-        label: "Internet",
-        type: "checkbox",
-        checked: isNet,
-        toggle: toggleNet,
-        text: "Usuário tem acesso à internet?"
-      }
+      
+      
+      
     ]
   },
   {
@@ -399,6 +418,7 @@ const formSections: FormSection[] = [
       },
       {
         label: "Acesso ao CRAS",
+        placeholder: "acesso",
         type: "input",
         name: "acesso_cras"
       }
@@ -409,16 +429,19 @@ const formSections: FormSection[] = [
     fields: [
       {
         label: "Descrição da Doença",
+        placeholder: "descrição da doença",
         type: "input",
         name: "desc_doenca"
       },
       {
         label: "Medicamentos Usados",
+        placeholder:  "medicamentos usados",
         type: "input",
         name: "medicamentos"
       },
       {
         label: "Gasto com Medicamentos",
+        placeholder: "gasto com medicamentos",
         type: "input",
         name: "medicamentos_gasto",
         inputType: "number"
@@ -440,25 +463,52 @@ const formSections: FormSection[] = [
       {
         label: "Nutrição",
         type: "input",
-        name: "nutri"
+        name: "nutri",
+        placeholder: "nutri"
       },
       {
         label: "Tempo de Tratamento",
+        placeholder: "tempo",
         type: "input",
         name: "tempo_tratamento"
       },
       {
         label: "Local do Tratamento",
         type: "input",
-        name: "local"
+        name: "local",
+        placeholder: "local"
       },
       {
         label: "Encaminhamento",
         type: "input",
-        name: "encaminhamento"
+        name: "encaminhamento",
+        placeholder: "encaminhamento"
       }
     ]
-  }
+  },
+  {
+    title: "Solicitações",
+    fields: [
+      {
+        label: "Solicitações",
+        type: "input",
+        name: "solicitacoes",
+        placeholder: "Solicitações"
+      },
+      {
+        label: "Observações",
+        type: "input",
+        name: "observacoes",
+        placeholder: "obs"
+      },
+      {
+        label: "Motivo do desligamento",
+        type: "input",
+        name: "motivo_desligamento",
+        placeholder: "(deixe em branco se não for desligado)"
+      },
+    ]
+  },
 ];
 
   return (
@@ -487,7 +537,7 @@ const formSections: FormSection[] = [
                       {field.type === 'input' && (
                         <Input
                           name={field.name}
-                          placeholder={field.label}
+                          placeholder={field.placeholder}
                           type={field.inputType || "text"}
                           value={dados[field.name] !== null && dados[field.name] !== undefined ? String(dados[field.name]) : ''}
                           onChange={handleInputChange}

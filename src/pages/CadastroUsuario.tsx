@@ -42,6 +42,7 @@ const initialUserState: User = {
   fonte_renda: '',
   valor_renda: '',
   moradia: '',
+  moradia_valor: '',
   agua: '',
   agua_valor: '',
   energia: '',
@@ -60,6 +61,7 @@ const initialUserState: User = {
   local: '',
   encaminhamento: '',
   solicitacoes: '',
+  observacoes: '',
   motivo_desligamento: '',
   parecer_social: ''
 };

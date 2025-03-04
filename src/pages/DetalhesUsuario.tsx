@@ -54,6 +54,7 @@ const DetalhesUsuario = () => {
         
         { key: 'fonte_renda', label: 'Fonte de Renda' },
         { key: 'valor_renda', label: 'Valor da Renda' },
+        { key: 'moradia_valor', label: 'Valor da Moradia' },
         { key: 'agua_valor', label: 'Valor da Água' },
         { key: 'energia_valor', label: 'Valor da Energia' },
       ]
@@ -94,6 +95,15 @@ const DetalhesUsuario = () => {
       fields: [
         { key: 'cras', label: 'CRAS' },
         { key: 'acesso_cras', label: 'Acesso CRAS' }
+      ]
+      
+    },
+    {
+      title: 'Solicitações',
+      fields: [
+        { key: 'solicitacoes', label: 'Solicitações' },
+        { key: 'observacoes', label: 'Observações' },
+        { key: 'motivo_desligamento', label: 'Motivo do desligamento' }
       ]
       
     }
@@ -175,11 +185,11 @@ const DetalhesUsuario = () => {
                   {column.fields.map((field) => (
                     <div key={field.key}>
                       <span className="text-sm text-gray-500">{field.label}</span>
-                      <p className="font-medium">
+                      <p className="font-medium break-words">
                       {field.key === 'escolaridade'
                         ? escolaridades[data[field.key]]
-                        : field.key === 'dataNasc'
-                        ? new Date(data[field.key]).toLocaleDateString('pt-BR')
+                        : field.key === 'data_nasc'
+                        ? data[field.key]?.slice(0, 10) 
                         : typeof data[field.key] === 'boolean'
                         ? data[field.key]
                           ? 'Sim'

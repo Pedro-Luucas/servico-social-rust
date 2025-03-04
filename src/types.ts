@@ -26,6 +26,7 @@ export interface User {
   fonte_renda: string;
   valor_renda: string;
   moradia: string;
+  moradia_valor: string;
   agua: string;
   agua_valor: string;
   energia: string;
@@ -43,6 +44,7 @@ export interface User {
   local: string;
   encaminhamento: string;
   solicitacoes: string;
+  observacoes: string;
   motivo_desligamento: string;
   parecer_social: string;
 }
