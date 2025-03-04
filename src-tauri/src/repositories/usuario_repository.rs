@@ -1,6 +1,7 @@
 use sqlx::PgPool;
 use uuid::Uuid;
 use crate::models::usuario::Usuario;
+use crate::dtos::edit_usuario_dto::EditUsuarioDto;
 
 pub struct UsuarioRepository;
 
@@ -229,4 +230,116 @@ impl UsuarioRepository {
     
         Ok(usuarios)
     }
+
+    pub async fn update(pool: &PgPool, id: Uuid, dto: EditUsuarioDto) -> Result<(), sqlx::Error> {
+        sqlx::query!(
+            r#"
+            UPDATE usuarios
+            SET 
+                nome = COALESCE($1, nome),
+                ativo = COALESCE($2, ativo),
+                cpf = COALESCE($3, cpf),
+                rg = COALESCE($4, rg),
+                data_nasc = COALESCE($5, data_nasc),
+                telefone = COALESCE($6, telefone),
+                profissao = COALESCE($7, profissao),
+                escolaridade = COALESCE($8, escolaridade),
+                patologia = COALESCE($9, patologia),
+                cep = COALESCE($10, cep),
+                municipio = COALESCE($11, municipio),
+                bairro = COALESCE($12, bairro),
+                rua = COALESCE($13, rua),
+                numero = COALESCE($14, numero),
+                referencia = COALESCE($15, referencia),
+                resp_nome = COALESCE($16, resp_nome),
+                resp_cpf = COALESCE($17, resp_cpf),
+                resp_idade = COALESCE($18, resp_idade),
+                resp_telefone = COALESCE($19, resp_telefone),
+                resp_profissao = COALESCE($20, resp_profissao),
+                resp_escolaridade = COALESCE($21, resp_escolaridade),
+                resp_parentesco = COALESCE($22, resp_parentesco),
+                resp_renda = COALESCE($23, resp_renda),
+                fonte_renda = COALESCE($24, fonte_renda),
+                valor_renda = COALESCE($25, valor_renda),
+                moradia = COALESCE($26, moradia),
+                moradia_valor = COALESCE($27, moradia_valor),
+                agua = COALESCE($28, agua),
+                agua_valor = COALESCE($29, agua_valor),
+                energia = COALESCE($30, energia),
+                energia_valor = COALESCE($31, energia_valor),
+                bens = COALESCE($32, bens),
+                internet = COALESCE($33, internet),
+                cras = COALESCE($34, cras),
+                acesso_cras = COALESCE($35, acesso_cras),
+                desc_doenca = COALESCE($36, desc_doenca),
+                medicamentos = COALESCE($37, medicamentos),
+                medicamentos_gasto = COALESCE($38, medicamentos_gasto),
+                tratamento = COALESCE($39, tratamento),
+                nutri = COALESCE($40, nutri),
+                tempo_tratamento = COALESCE($41, tempo_tratamento),
+                local = COALESCE($42, local),
+                encaminhamento = COALESCE($43, encaminhamento),
+                solicitacoes = COALESCE($44, solicitacoes),
+                observacoes = COALESCE($45, observacoes),
+                motivo_desligamento = COALESCE($46, motivo_desligamento),
+                parecer_social = COALESCE($47, parecer_social),
+                operador_id = COALESCE($48, operador_id)
+            WHERE id = $49
+            "#,
+            dto.nome,
+            dto.ativo,
+            dto.cpf,
+            dto.rg,
+            dto.data_nasc,
+            dto.telefone,
+            dto.profissao,
+            dto.escolaridade,
+            dto.patologia,
+            dto.cep,
+            dto.municipio,
+            dto.bairro,
+            dto.rua,
+            dto.numero,
+            dto.referencia,
+            dto.resp_nome,
+            dto.resp_cpf,
+            dto.resp_idade,
+            dto.resp_telefone,
+            dto.resp_profissao,
+            dto.resp_escolaridade,
+            dto.resp_parentesco,
+            dto.resp_renda,
+            dto.fonte_renda,
+            dto.valor_renda,
+            dto.moradia,
+            dto.moradia_valor,
+            dto.agua,
+            dto.agua_valor,
+            dto.energia,
+            dto.energia_valor,
+            dto.bens,
+            dto.internet,
+            dto.cras,
+            dto.acesso_cras,
+            dto.desc_doenca,
+            dto.medicamentos,
+            dto.medicamentos_gasto,
+            dto.tratamento,
+            dto.nutri,
+            dto.tempo_tratamento,
+            dto.local,
+            dto.encaminhamento,
+            dto.solicitacoes,
+            dto.observacoes,
+            dto.motivo_desligamento,
+            dto.parecer_social,
+            dto.operador_id,
+            id
+        )
+        .execute(pool)
+        .await?;
+
+        Ok(())
+    }
+    
 }

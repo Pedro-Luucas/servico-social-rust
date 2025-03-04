@@ -2,6 +2,7 @@ use uuid::Uuid;
 use crate::models::usuario::Usuario;
 use crate::repositories::usuario_repository::UsuarioRepository;
 use crate::dtos::create_usuario_dto::CreateUsuarioDto;
+use crate::dtos::edit_usuario_dto::EditUsuarioDto;
 use sqlx::PgPool;
 
 pub struct UsuarioService;
@@ -84,4 +85,10 @@ impl UsuarioService {
         UsuarioRepository::find_by_cpf(pool, cpf).await
     }
     
+
+    pub async fn update_usuario(pool: &PgPool, dto: EditUsuarioDto) -> Result<(), sqlx::Error> {
+        let id = Uuid::parse_str(&dto.id).map_err(|_| sqlx::Error::Decode("Invalid UUID".into()))?;
+        UsuarioRepository::update(pool, id, dto).await
+    }
+
 }

@@ -3,6 +3,7 @@ use uuid::Uuid;
 use crate::models::usuario::Usuario;
 use crate::services::usuario_service::UsuarioService;
 use crate::dtos::create_usuario_dto::CreateUsuarioDto;
+use crate::dtos::edit_usuario_dto::EditUsuarioDto;
 use sqlx::PgPool;
 
 #[tauri::command]
@@ -44,6 +45,13 @@ pub async fn get_usuario_by_cep(pool: State<'_, PgPool>, cep: String) -> Result<
 #[tauri::command]
 pub async fn get_usuario_by_cpf(pool: State<'_, PgPool>, cpf: String) -> Result<Vec<Usuario>, String> {
     UsuarioService::get_usuario_by_cpf(&pool, &cpf)
+        .await
+        .map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub async fn edit_usuario(pool: State<'_, PgPool>, dto: EditUsuarioDto) -> Result<(), String> {
+    UsuarioService::update_usuario(&pool, dto)
         .await
         .map_err(|e| e.to_string())
 }
