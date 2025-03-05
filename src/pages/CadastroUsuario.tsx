@@ -63,7 +63,8 @@ const initialUserState: User = {
   solicitacoes: '',
   observacoes: '',
   motivo_desligamento: '',
-  parecer_social: ''
+  parecer_social: '',
+  operador_id: ''
 };
 
 const escolaridadeOptions = [
@@ -79,12 +80,15 @@ const CadastroUsuario: React.FC<UserFormProps> = ({ onSubmit, initialData }) => 
   const navigate = useNavigate();
   const [formData, setFormData] = useState<User>(() => {
     try {
+      
       const storedData = sessionStorage.getItem('formData');
       return storedData ? JSON.parse(storedData) : initialData || initialUserState;
     } catch {
       return initialData || initialUserState;
     }
   });
+  
+
 
   useEffect(() => {
     invoke('resize_current_window', { width: 800, height: 900 })
@@ -194,6 +198,12 @@ const CadastroUsuario: React.FC<UserFormProps> = ({ onSubmit, initialData }) => 
     </div>
   );
 
+  useEffect(() => {
+    const operadorId = localStorage.getItem('operadorId')
+    setFormData((prev: User) => ({...prev, operadorId: operadorId}));
+    console.log('operador: ',operadorId)
+  }, []);
+  
   return (
     <div className="container mx-auto p-4 md:p-8">
       <h1 className="text-2xl md:text-4xl font-bold mb-4 md:mb-8 text-center">Serviço Social</h1>

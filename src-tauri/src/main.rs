@@ -37,6 +37,9 @@ let pool = match PgPool::connect(&database_url).await {
             
             handlers::resize_handler::resize_current_window,
 
+            handlers::operador_handler::create_operador,
+            handlers::operador_handler::login_operador,
+
             handlers::usuario_handler::create_usuario,
             handlers::usuario_handler::edit_usuario,
 

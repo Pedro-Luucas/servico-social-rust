@@ -64,16 +64,11 @@ export const submitUsuario = async (userData: User): Promise<void> => {
       medicamentos_gasto: userData.medicamentos_gasto !== '' ? Number(userData.medicamentos_gasto) : null,
 
       
-      // Set a default operator ID if needed (customize as needed)
-      operador_id: 0, // test
-      // userData.operador_id || sessionStorage.getItem('operadorId') ? 
-      //  Number(sessionStorage.getItem('operadorId')) : 
-      //  null
+      operador_id: userData.operador_id !== '' ? Number(userData.operador_id) : null
     };
 
     console.log('Submitting user data:', formattedData);
     
-    // Check if we're in edit mode
     const isEditMode = sessionStorage.getItem('edit') === 'true';
     
     if (isEditMode) {
@@ -87,9 +82,9 @@ export const submitUsuario = async (userData: User): Promise<void> => {
       const result = await invoke('create_usuario', { dto: formattedData });
       console.log('Usuario created successfully:', result);
     }
-    
+
   } catch (error) {
     console.error('Error submitting user:', error);
-    throw error; // Re-throw to let the caller handle the error
+    throw error; 
   }
 };

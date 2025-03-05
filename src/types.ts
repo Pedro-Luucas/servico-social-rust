@@ -47,6 +47,7 @@ export interface User {
   observacoes: string;
   motivo_desligamento: string;
   parecer_social: string;
+  operador_id: string;
 }
 
 export const escolaridades = ['ensino fundamental incompleto',

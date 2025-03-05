@@ -104,7 +104,8 @@ const AdicionarDados: React.FC = () => {
     solicitacoes: '',
     observacoes: '',
     motivo_desligamento: '',
-    parecer_social: ''
+    parecer_social: '',
+    operador_id: '',
   })
 
   const [isFormComplete, setIsFormComplete] = useState(false);
