@@ -10,6 +10,7 @@ import DetalhesUsuario from './pages/DetalhesUsuario';
 import RegistrosAtendimento from './pages/RegistrosAtendimento';
 import CadastrarNovoOperador from './pages/CadastrarNovoOperador';
 import LoginOperador from './pages/LoginOperador';
+import Documentos from './pages/Documentos';
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
   {
     path: '/registro-atendimento/:id',
     element: <RegistrosAtendimento />,
+  },
+  {
+    path: '/documentos/:id',
+    element: <Documentos />,
   },
   {
     path: '/cadastrarnovooperador',

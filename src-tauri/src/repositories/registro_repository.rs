@@ -1,6 +1,6 @@
+use crate::models::registro::Registro;
 use sqlx::PgPool;
 use uuid::Uuid;
-use crate::models::registro::Registro;
 
 pub struct RegistroRepository;
 
@@ -44,7 +44,10 @@ impl RegistroRepository {
         Ok(registro)
     }
 
-    pub async fn find_by_usuario_id(pool: &PgPool, usuario_id: Uuid) -> Result<Vec<Registro>, sqlx::Error> {
+    pub async fn find_by_usuario_id(
+        pool: &PgPool,
+        usuario_id: Uuid,
+    ) -> Result<Vec<Registro>, sqlx::Error> {
         let registros = sqlx::query_as!(
             Registro,
             r#"
@@ -66,7 +69,7 @@ impl RegistroRepository {
         let result = sqlx::query!("DELETE FROM registros WHERE id = $1", id)
             .execute(pool)
             .await?;
-        
+
         Ok(result.rows_affected() > 0)
     }
 }

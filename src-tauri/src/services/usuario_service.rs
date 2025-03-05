@@ -1,9 +1,9 @@
-use uuid::Uuid;
-use crate::models::usuario::Usuario;
-use crate::repositories::usuario_repository::UsuarioRepository;
 use crate::dtos::create_usuario_dto::CreateUsuarioDto;
 use crate::dtos::edit_usuario_dto::EditUsuarioDto;
+use crate::models::usuario::Usuario;
+use crate::repositories::usuario_repository::UsuarioRepository;
 use sqlx::PgPool;
+use uuid::Uuid;
 
 pub struct UsuarioService;
 
@@ -69,26 +69,31 @@ impl UsuarioService {
         UsuarioRepository::find_by_id(pool, id).await
     }
 
-    pub async fn get_usuario_by_nome(pool: &PgPool, nome: &str) -> Result<Vec<Usuario>, sqlx::Error> {
+    pub async fn get_usuario_by_nome(
+        pool: &PgPool,
+        nome: &str,
+    ) -> Result<Vec<Usuario>, sqlx::Error> {
         UsuarioRepository::find_by_nome(pool, nome).await
     }
 
-    pub async fn get_usuario_by_telefone(pool: &PgPool, telefone: &str) -> Result<Vec<Usuario>, sqlx::Error> {
+    pub async fn get_usuario_by_telefone(
+        pool: &PgPool,
+        telefone: &str,
+    ) -> Result<Vec<Usuario>, sqlx::Error> {
         UsuarioRepository::find_by_telefone(pool, telefone).await
     }
-    
+
     pub async fn get_usuario_by_cep(pool: &PgPool, cep: &str) -> Result<Vec<Usuario>, sqlx::Error> {
         UsuarioRepository::find_by_cep(pool, cep).await
     }
-    
+
     pub async fn get_usuario_by_cpf(pool: &PgPool, cpf: &str) -> Result<Vec<Usuario>, sqlx::Error> {
         UsuarioRepository::find_by_cpf(pool, cpf).await
     }
-    
 
     pub async fn update_usuario(pool: &PgPool, dto: EditUsuarioDto) -> Result<(), sqlx::Error> {
-        let id = Uuid::parse_str(&dto.id).map_err(|_| sqlx::Error::Decode("Invalid UUID".into()))?;
+        let id =
+            Uuid::parse_str(&dto.id).map_err(|_| sqlx::Error::Decode("Invalid UUID".into()))?;
         UsuarioRepository::update(pool, id, dto).await
     }
-
 }

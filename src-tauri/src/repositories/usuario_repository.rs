@@ -1,7 +1,7 @@
+use crate::dtos::edit_usuario_dto::EditUsuarioDto;
+use crate::models::usuario::Usuario;
 use sqlx::PgPool;
 use uuid::Uuid;
-use crate::models::usuario::Usuario;
-use crate::dtos::edit_usuario_dto::EditUsuarioDto;
 
 pub struct UsuarioRepository;
 
@@ -137,11 +137,14 @@ impl UsuarioRepository {
         )
         .fetch_all(pool)
         .await?;
-    
+
         Ok(usuarios)
     }
 
-    pub async fn find_by_telefone(pool: &PgPool, telefone: &str) -> Result<Vec<Usuario>, sqlx::Error> {
+    pub async fn find_by_telefone(
+        pool: &PgPool,
+        telefone: &str,
+    ) -> Result<Vec<Usuario>, sqlx::Error> {
         let search_telefone = format!("%{}%", telefone);
         let usuarios = sqlx::query_as!(
             Usuario,
@@ -167,10 +170,10 @@ impl UsuarioRepository {
         )
         .fetch_all(pool)
         .await?;
-    
+
         Ok(usuarios)
     }
-    
+
     pub async fn find_by_cep(pool: &PgPool, cep: &str) -> Result<Vec<Usuario>, sqlx::Error> {
         let search_cep = format!("%{}%", cep);
         let usuarios = sqlx::query_as!(
@@ -197,10 +200,10 @@ impl UsuarioRepository {
         )
         .fetch_all(pool)
         .await?;
-    
+
         Ok(usuarios)
     }
-    
+
     pub async fn find_by_cpf(pool: &PgPool, cpf: &str) -> Result<Vec<Usuario>, sqlx::Error> {
         let search_cpf = format!("%{}%", cpf);
         let usuarios = sqlx::query_as!(
@@ -227,7 +230,7 @@ impl UsuarioRepository {
         )
         .fetch_all(pool)
         .await?;
-    
+
         Ok(usuarios)
     }
 
@@ -341,5 +344,4 @@ impl UsuarioRepository {
 
         Ok(())
     }
-    
 }

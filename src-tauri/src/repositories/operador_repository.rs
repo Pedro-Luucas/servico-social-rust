@@ -1,5 +1,5 @@
-use sqlx::PgPool;
 use crate::models::operador::Operador;
+use sqlx::PgPool;
 
 pub struct OperadorRepository;
 
@@ -33,7 +33,11 @@ impl OperadorRepository {
         Ok(result.next_id.unwrap_or(0))
     }
 
-    pub async fn find_by_credentials(pool: &PgPool, nome: &str, senha: &str) -> Result<Option<i64>, sqlx::Error> {
+    pub async fn find_by_credentials(
+        pool: &PgPool,
+        nome: &str,
+        senha: &str,
+    ) -> Result<Option<i64>, sqlx::Error> {
         let result = sqlx::query!(
             r#"
             SELECT id

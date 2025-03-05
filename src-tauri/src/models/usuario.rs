@@ -1,4 +1,4 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -52,5 +52,4 @@ pub struct Usuario {
     pub motivo_desligamento: Option<String>,
     pub parecer_social: String,
     pub operador_id: Option<i64>,
-    
 }

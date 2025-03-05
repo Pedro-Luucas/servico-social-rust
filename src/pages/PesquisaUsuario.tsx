@@ -90,9 +90,9 @@ const PesquisaUsuario: React.FC = () => {
   }
 
   const anexarDocumentos = (id: string | undefined) => {
-    //if(id) {
-    //  navigate('/documentos/'+id)
-    //}
+    if(id) {
+      navigate('/documentos/'+id)
+    }
   }
 
   const renderResults = () => {

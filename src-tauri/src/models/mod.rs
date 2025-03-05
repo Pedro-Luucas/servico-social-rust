@@ -1,3 +1,4 @@
-pub mod usuario;
-pub mod registro;
+pub mod documento;
 pub mod operador;
+pub mod registro;
+pub mod usuario;
