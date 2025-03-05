@@ -10,6 +10,23 @@
     "core:window:default",
     "core:window:allow-start-dragging",
     "dialog:default",
-    "fs:default"
+    "fs:default",
+    {
+      "identifier": "fs:allow-exists",
+      "allow": [
+        {
+          "path": "$TEMP/**"
+        }
+      ]
+    },
+    "fs:scope-temp-index",
+    "fs:allow-temp-write",
+    "fs:allow-temp-read",
+    "fs:allow-temp-read-recursive",
+    "fs:allow-temp-write-recursive",
+    "fs:allow-temp-meta",
+    "fs:scope-temp-recursive",
+    "fs:scope-temp",
+    "shell:default"
   ]
 }

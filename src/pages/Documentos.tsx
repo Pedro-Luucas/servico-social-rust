@@ -7,6 +7,8 @@ import { open } from '@tauri-apps/plugin-dialog';
 // Update the import to use readFile instead of readBinaryFile
 import { readFile } from '@tauri-apps/plugin-fs';
 import { message } from 'antd';
+import { writeFile } from '@tauri-apps/plugin-fs';
+import { open as openFile } from '@tauri-apps/plugin-shell';
 
 const { Text } = Typography;
 
@@ -221,18 +223,32 @@ const Documentos: React.FC = () => {
   };
 
   const handleViewDocument = async (document: any) => {
-    // This is a simplified approach. In a real app, you might want to save the file
-    // to a temporary location and then open it with the default application
     try {
-      // For now, we'll just show a message
-      message.info(`Visualizando documento: ${document.file_name}`);
+      console.log('[DEBUG] Fetching document content:', document.id);
       
-      // In a real implementation, you would:
-      // 1. Get the document binary data
-      // 2. Save it to a temporary file
-      // 3. Open it with the default application
+      // Get the document content from the backend
+      const content = await invoke('get_documento_content', { id: document.id });
+      
+      if (!content) {
+        throw new Error('Document content not found');
+      }
+      
+      // Create a temporary file path with the original extension
+      const extension = document.file_name.split('.').pop() || '';
+      const tempDir = await invoke('get_temp_dir');
+      const tempPath = `${tempDir}${document.id}.${extension}`;
+      
+      console.log('[DEBUG] Saving document to temp file:', tempPath);
+      
+      // Save the content to a temporary file
+      await writeFile(tempPath, new Uint8Array(content as number[]));
+      
+      // Open the file with the system's default application
+      console.log('[DEBUG] Opening document with default viewer');
+      await openFile(tempPath);
+      
     } catch (err) {
-      console.error('Error viewing document:', err);
+      console.error('[DEBUG] Error viewing document:', err);
       message.error('Erro ao visualizar documento');
     }
   };

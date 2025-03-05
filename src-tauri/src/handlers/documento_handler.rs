@@ -51,3 +51,25 @@ pub async fn delete_documento(pool: State<'_, PgPool>, id: String) -> Result<boo
         .await
         .map_err(|e| e.to_string())
 }
+
+#[tauri::command]
+pub async fn get_documento_content(pool: State<'_, PgPool>, id: String) -> Result<Vec<u8>, String> {
+    let uuid = Uuid::parse_str(&id).map_err(|e| e.to_string())?;
+
+    // Get the document from the database
+    let documento = DocumentoService::get_documento_by_id(&pool, uuid)
+        .await
+        .map_err(|e| e.to_string())?;
+
+    // Return just the binary content
+    Ok(documento.documento)
+}
+
+#[tauri::command]
+pub fn get_temp_dir() -> Result<String, String> {
+    // Get the system's temporary directory
+    std::env::temp_dir()
+        .to_str()
+        .map(|s| s.to_string())
+        .ok_or_else(|| "Failed to get temporary directory".to_string())
+}

@@ -32,6 +32,7 @@ async fn main() {
 
     // Start Tauri application
     tauri::Builder::default()
+        .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_dialog::init())
         .manage(pool)
@@ -54,6 +55,8 @@ async fn main() {
             handlers::documento_handler::get_documento_by_id,
             handlers::documento_handler::get_documentos_by_usuario_id,
             handlers::documento_handler::delete_documento,
+            handlers::documento_handler::get_documento_content,
+            handlers::documento_handler::get_temp_dir,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
