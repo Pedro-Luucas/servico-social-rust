@@ -73,10 +73,20 @@ export const submitUsuario = async (userData: User): Promise<void> => {
 
     console.log('Submitting user data:', formattedData);
     
-    // Call the Rust backend to create the user
-    const result = await invoke('create_usuario', { dto: formattedData });
-    console.log('Usuario created successfully:', result);
+    // Check if we're in edit mode
+    const isEditMode = sessionStorage.getItem('edit') === 'true';
     
+    if (isEditMode) {
+      if (!userData.id) {
+        throw new Error('No ID found in user data for edit mode');
+      }
+      formattedData.id = userData.id;
+      const result = await invoke('edit_usuario', { dto: formattedData });
+      console.log('Usuario updated successfully:', result);
+    } else {
+      const result = await invoke('create_usuario', { dto: formattedData });
+      console.log('Usuario created successfully:', result);
+    }
     
   } catch (error) {
     console.error('Error submitting user:', error);

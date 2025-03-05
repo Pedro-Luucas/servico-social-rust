@@ -76,11 +76,11 @@ const PesquisaUsuario: React.FC = () => {
   }
   
   const editarUsuario = (user: User) => {
-    //if(user) {
-    //  sessionStorage.setItem('edit', 'true')
-    //  sessionStorage.setItem('formData', JSON.stringify(user))
-    //  navigate('/cadastro-usuario')
-    //}
+    if(user) {
+      sessionStorage.setItem('edit', 'true')
+      sessionStorage.setItem('formData', JSON.stringify(user))
+      navigate('/cadastro-usuario')
+    }
   }
 
   const adicionarRegistroAtendimento = (id: string | undefined) => {

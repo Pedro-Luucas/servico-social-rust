@@ -282,19 +282,13 @@ const handleFormSubmit = (e: React.FormEvent) => {
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
   try {
-    const isEditing = sessionStorage.getItem("edit") === "true";
     
-    if (isEditing) {
-      //setShowModalSubmit(false);
-      //const result = await editUsuario();
-      //navigate('/pesquisa')
-      console.log('workin gonit...')
-    } else {
-      setShowModalSubmit(false);
-      
-      submitUsuario(dados)
-      navigate('/')
-    }
+
+    setShowModalSubmit(false);
+    
+    submitUsuario(dados)
+    navigate('/')
+    
     
   } catch (error) {
     console.error("Error submitting/editing user:", error);
