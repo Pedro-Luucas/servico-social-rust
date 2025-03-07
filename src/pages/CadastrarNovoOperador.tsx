@@ -1,5 +1,5 @@
 
-import { Form, Input, Button, Card, Modal } from 'antd';
+import { Form, Input, Button, Card } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { invoke } from '@tauri-apps/api/core';
 

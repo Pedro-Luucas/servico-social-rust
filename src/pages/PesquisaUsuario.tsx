@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Input, Select, Card, Typography, List, Alert } from 'antd';
+import { Button, Input, Select, Card, Typography, List, Alert, Tooltip } from 'antd';
 import { escolaridades, User } from '../types';
 import { DiffOutlined, EditOutlined, EyeOutlined, FilePdfOutlined, LeftOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
@@ -27,11 +27,16 @@ const PesquisaUsuario: React.FC = () => {
   useEffect(() => {
     sessionStorage.setItem('searchQuery', search)
   },[search])
-
-  // resize a janela the window faz os resize esse useEffect tlg
+// resize a janela the window faz os resize esse useEffect tlg
   useEffect(() => {
-
-    invoke('resize_current_window', { width: 1250, height: 650 })
+    // Get screen dimensions and resize window to percentages
+    invoke('get_screen_size')
+      .then((screenSize: any) => {
+        const width = screenSize.width * 0.65; 
+        const height = screenSize.height * 0.55; 
+        
+        return invoke('resize_current_window', { width, height });
+      })
       .then(() => console.log('Window resized successfully'))
       .catch((error) => console.error('Failed to resize window:', error));
   }, []);
@@ -122,10 +127,18 @@ const PesquisaUsuario: React.FC = () => {
                     <p className="font-bold text-base truncate">{u.nome}</p>
                   </div>
                   <div className="flex flex-wrap justify-end">
-                    <Button type='text' size="small" icon={<EyeOutlined />} onClick={() => {detalhes(u.id)}} />
-                    <Button type='text' size="small" icon={<EditOutlined />} onClick={() => {editarUsuario(u)}} />
-                    <Button type='text' size="small" icon={<DiffOutlined />} onClick={() => {adicionarRegistroAtendimento(u.id)}} />
-                    <Button type='text' size="small" icon={<FilePdfOutlined />} onClick={() => {anexarDocumentos(u.id)}} />
+                    <Tooltip title="Visualizar detalhes">
+                      <Button type='text' size="small" icon={<EyeOutlined />} onClick={() => {detalhes(u.id)}} />
+                    </Tooltip>
+                    <Tooltip title="Editar usuário">
+                      <Button type='text' size="small" icon={<EditOutlined />} onClick={() => {editarUsuario(u)}} />
+                    </Tooltip>
+                    <Tooltip title="Adicionar registro de atendimento">
+                      <Button type='text' size="small" icon={<DiffOutlined />} onClick={() => {adicionarRegistroAtendimento(u.id)}} />
+                    </Tooltip>
+                    <Tooltip title="Anexar documentos">
+                      <Button type='text' size="small" icon={<FilePdfOutlined />} onClick={() => {anexarDocumentos(u.id)}} />
+                    </Tooltip>
                   </div>
                 </div>
                 <p className="text-sm lg:text-base">{ativo[u.ativo]}</p>

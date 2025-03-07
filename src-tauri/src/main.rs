@@ -38,6 +38,7 @@ async fn main() {
         .manage(pool)
         .invoke_handler(tauri::generate_handler![
             handlers::resize_handler::resize_current_window,
+            handlers::resize_handler::get_screen_size,
             handlers::operador_handler::create_operador,
             handlers::operador_handler::login_operador,
             handlers::usuario_handler::create_usuario,

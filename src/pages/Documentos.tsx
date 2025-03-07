@@ -28,13 +28,20 @@ const Documentos: React.FC = () => {
   const [uploadLoading, setUploadLoading] = useState(false);
 
   useEffect(() => {
-    // Resize window
-    invoke('resize_current_window', { width: 1250, height: 650 })
+    // Get screen dimensions and resize window to percentages
+    invoke('get_screen_size')
+      .then((screenSize: any) => {
+        const width = screenSize.width * 0.65; 
+        const height = screenSize.height * 0.55; 
+        
+        return invoke('resize_current_window', { width, height });
+      })
       .then(() => console.log('Window resized successfully'))
       .catch((error) => console.error('Failed to resize window:', error));
-    
+
+    // Fetch data on component mount
     fetchData();
-  }, [id]);
+  }, []);
 
   const fetchData = async () => {
     if (!id) return;

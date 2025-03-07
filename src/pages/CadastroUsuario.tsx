@@ -91,7 +91,14 @@ const CadastroUsuario: React.FC<UserFormProps> = ({ onSubmit, initialData }) => 
 
 
   useEffect(() => {
-    invoke('resize_current_window', { width: 800, height: 900 })
+    // Get screen dimensions and resize window to percentages
+    invoke('get_screen_size')
+      .then((screenSize: any) => {
+        const width = screenSize.width * 0.45; 
+        const height = screenSize.height * 0.81; 
+        
+        return invoke('resize_current_window', { width, height });
+      })
       .then(() => console.log('Window resized successfully'))
       .catch((error) => console.error('Failed to resize window:', error));
   }, []);
