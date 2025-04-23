@@ -2,13 +2,13 @@
 
 ![image](https://github.com/user-attachments/assets/3b134817-4a8d-42b2-a358-1550b435487a)
 
-##Tecnologias utilizadas
+## Tecnologias utilizadas
 * React
 * Rust
 * Tauri
 * Postgres SQL
 
-##Funcionalidades
+## Funcionalidades
 * Cadastro de operadores
 * Autenticação
 * Cadastro de usuários
